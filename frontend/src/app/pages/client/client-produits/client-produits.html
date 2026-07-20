@@ -1,0 +1,93 @@
+<div class="produits-page">
+  <div class="page-header">
+    <div>
+      <h1>📱 Mes Produits</h1>
+      <p>Suivez l'état de réparation de vos appareils</p>
+    </div>
+  </div>
+
+  <div class="loading" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
+    Chargement de vos produits...
+  </div>
+
+  <div class="produits-list" *ngIf="!loading">
+    <div class="product-card" *ngFor="let p of produits">
+      <div class="product-header">
+        <div class="product-info">
+          <div class="product-icon">📱</div>
+          <div class="product-details">
+            <h3 class="product-name">{{ p.nom }}</h3>
+            <p class="product-date">Déposé le: {{ p.dateDepot | date:'dd/MM/yyyy' }}</p>
+            <p class="product-desc">{{ p.descriptionPanne }}</p>
+          </div>
+        </div>
+        <div class="product-status">
+          <span class="status-badge" [style.color]="getStatusColor(p.statut)">
+            <span class="status-dot" [style.background]="getStatusColor(p.statut)"></span>
+            {{ getStatusLabel(p.statut) }}
+          </span>
+        </div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-step" *ngFor="let s of statuts; let i = index" [class.active]="isStepActive(p.statut, i)" [class.current]="isStepCurrent(p.statut, i)">
+          <div class="step-circle">
+            <span *ngIf="isStepActive(p.statut, i) && !isStepCurrent(p.statut, i)">✓</span>
+            <span *ngIf="isStepCurrent(p.statut, i)">{{ i + 1 }}</span>
+            <span *ngIf="!isStepActive(p.statut, i)">{{ i + 1 }}</span>
+          </div>
+          <div class="step-label">{{ getStatusLabel(s) }}</div>
+        </div>
+      </div>
+
+      <div class="product-actions">
+        <button class="btn-reclamation" (click)="openReclamationModal(p)">
+          <span>📝</span> Ouvrir une réclamation
+        </button>
+       <!-- <button class="btn-rdv" *ngIf="p.statut === 'PRET'">
+          <span>📅</span> Prendre rendez-vous
+        </button>-->
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="produits.length === 0" style="text-align: center; padding: 30px; color: #888;">
+      <p>Vous n'avez aucun produit en réparation</p>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showReclamationModal" (click)="closeReclamationModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>📝 Nouvelle Réclamation</h2>
+        <button class="modal-close" (click)="closeReclamationModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Produit concerné *</label>
+          <select [(ngModel)]="reclamationForm.produitId" disabled>
+            <option [ngValue]="selectedProduit?.id">{{ selectedProduit?.nom }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Type de problème *</label>
+          <select [(ngModel)]="reclamationForm.typeProbleme" required>
+            <option value="">Sélectionner un type</option>
+            <option *ngFor="let t of typesProbleme" [value]="t">{{ t }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Description détaillée *</label>
+          <textarea [(ngModel)]="reclamationForm.description" placeholder="Décrivez votre problème en détail pour que nous puissions vous aider rapidement..." maxlength="1000" rows="5" required></textarea>
+          <span class="char-count">{{ reclamationForm.description.length || 0 }}/1000</span>
+        </div>
+        <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeReclamationModal()">Annuler</button>
+        <button class="btn-primary" (click)="saveReclamation()">Envoyer</button>
+      </div>
+    </div>
+  </div>
+</div>

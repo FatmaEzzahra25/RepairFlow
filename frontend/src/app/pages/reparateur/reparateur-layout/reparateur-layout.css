@@ -1,0 +1,29 @@
+.reparateur-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #F1F5F9;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-left: 260px;
+  transition: margin-left 0.3s ease;
+}
+
+.main-content.collapsed {
+  margin-left: 64px;
+}
+
+.page-content {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+}

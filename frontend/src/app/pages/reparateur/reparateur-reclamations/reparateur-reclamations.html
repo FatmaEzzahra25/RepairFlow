@@ -1,0 +1,147 @@
+<div class="reclamations-page">
+  <div class="page-header">
+    <div>
+      <h1>📝 Gestion des Réparations</h1>
+      <p>Traitez et répondez aux réclamations de vos clients</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <select class="filter-select" [(ngModel)]="statusFilter">
+      <option value="TOUS">Toutes</option>
+      <option value="OUVERT">Ouvertes</option>
+      <option value="FERME">Fermées</option>
+    </select>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher client, produit...">
+    </div>
+    <button class="btn-reset" (click)="searchQuery = ''; statusFilter = 'TOUS'">↻ Réinitialiser</button>
+  </div>
+
+  <div class="loading-state" *ngIf="loading()" style="text-align: center; padding: 40px; color: #666;">
+    <p>Chargement des réclamations...</p>
+  </div>
+
+  <div class="table-card" *ngIf="!loading()">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>#ID</th>
+        <th>DATE</th>
+        <th>CLIENT</th>
+        <th>PRODUIT</th>
+        <th>STATUT</th>
+        <th>ACTIONS</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of filteredReclamations">
+        <td class="id-cell">REC-{{ r?.id }}</td>
+        <td>{{ r?.date | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <div class="user-info">
+            <div class="user-avatar">
+              {{ r?.produit?.client?.prenom?.[0] || '' }}{{ r?.produit?.client?.nom?.[0] || '👤' }}
+            </div>
+            <span class="user-name">{{ r?.produit?.client?.prenom }} {{ r?.produit?.client?.nom }}</span>
+          </div>
+        </td>
+        <td class="product-name">{{ r?.produit?.nom }}</td>
+        <td>
+            <span class="status-badge" [class.ouvert]="r?.statut === 'OUVERT'" [class.ferme]="r?.statut === 'FERME'">
+              <span class="status-dot" [class.ouvert]="r?.statut === 'OUVERT'" [class.ferme]="r?.statut === 'FERME'"></span>
+              {{ r?.statut }}
+            </span>
+        </td>
+        <td>
+          <div class="actions">
+            <button class="btn-icon" title="Voir détails" (click)="openViewReclamation(r)">👁</button>
+            <button class="btn-icon" title="Contacter le client" (click)="contactClient(r)">✉</button>
+            <button class="btn-icon close" *ngIf="r?.statut === 'OUVERT'" (click)="cloturerReclamation(r.id)" title="Clôturer">🔒</button>
+          </div>
+        </td>
+      </tr>
+
+      <tr *ngIf="filteredReclamations.length === 0">
+        <td colspan="6" class="empty-state" style="text-align: center; padding: 30px; color: #888;">Aucune réclamation trouvée</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showViewModal()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🔍 Détails de la Réclamation #REC-{{ selectedReclamation()?.id }}</h3>
+        <button class="close-modal-btn" (click)="closeViewModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row">
+          <strong>Date de création:</strong>
+          <span>{{ selectedReclamation()?.date | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Statut:</strong>
+          <span class="status-badge" [class.ouvert]="selectedReclamation()?.statut === 'OUVERT'" [class.ferme]="selectedReclamation()?.statut === 'FERME'">
+            {{ selectedReclamation()?.statut }}
+          </span>
+        </div>
+        <div class="detail-row">
+          <strong>Produit:</strong>
+          <span>{{ selectedReclamation()?.produit?.nom || 'N/A' }}</span>
+        </div>
+        <div class="detail-row">
+          <strong>Description / Problème:</strong>
+          <p class="desc-text">{{ selectedReclamation()?.description || 'Aucune description fournie.' }}</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeViewModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showContactModal()">
+    <div class="modal-card mini-card">
+      <div class="modal-header">
+        <h3>✉ Contact Client</h3>
+        <button class="close-modal-btn" (click)="closeContactModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="client-profile">
+          <div class="large-avatar">
+            {{ selectedReclamation()?.produit?.client?.prenom?.[0] || '' }}{{ selectedReclamation()?.produit?.client?.nom?.[0] || '👤' }}
+          </div>
+          <h4>{{ selectedReclamation()?.produit?.client?.prenom }} {{ selectedReclamation()?.produit?.client?.nom }}</h4>
+        </div>
+
+        <div class="contact-links">
+          <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <div class="contact-details">
+              <span class="contact-label">Téléphone</span>
+              <a [href]="'tel:' + selectedReclamation()?.produit?.client?.telephone" class="contact-val">
+                {{ selectedReclamation()?.produit?.client?.telephone || 'Non renseigné' }}
+              </a>
+            </div>
+          </div>
+
+          <div class="contact-item">
+            <span class="contact-icon">📧</span>
+            <div class="contact-details">
+              <span class="contact-label">E-mail</span>
+              <a [href]="'mailto:' + selectedReclamation()?.produit?.client?.email" class="contact-val">
+                {{ selectedReclamation()?.produit?.client?.email || 'Non renseigné' }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeContactModal()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
+</div>

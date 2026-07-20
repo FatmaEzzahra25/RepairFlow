@@ -1,0 +1,24 @@
+<div class="categories-page">
+  <div class="page-header">
+    <div>
+      <h1>📁 Catégories de Produits</h1>
+      <p>Consultez les catégories d'équipements disponibles</p>
+    </div>
+  </div>
+
+  <div class="categories-grid" *ngIf="!loading">
+    <div class="category-card" *ngFor="let cat of categories">
+      <div class="category-icon">📱</div>
+      <h3 class="category-name">{{ cat.libelle }}</h3>
+      <p class="category-desc">{{ cat.description || 'Aucune description' }}</p>
+      <div class="category-meta">
+        <span class="meta-badge">{{ cat.produits?.length || 0 }} produits</span>
+      </div>
+    </div>
+    <div class="empty-state" *ngIf="categories.length === 0">
+      Aucune catégorie disponible
+    </div>
+  </div>
+
+  <div class="loading" *ngIf="loading">Chargement...</div>
+</div>

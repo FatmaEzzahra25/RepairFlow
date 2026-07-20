@@ -1,0 +1,42 @@
+<div class="reclamations-page">
+  <div class="page-header">
+    <div>
+      <h1>📝 Mes Réclamations</h1>
+      <p>Consultez et suivez vos réclamations</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <select class="filter-select" [(ngModel)]="statusFilter">
+      <option value="TOUS">Toutes</option>
+      <option value="OUVERT">Ouvertes</option>
+      <option value="FERME">Fermées</option>
+    </select>
+  </div>
+
+  <div class="reclamations-list" *ngIf="!loading">
+    <div class="reclamation-card" *ngFor="let r of filteredReclamations">
+      <div class="reclamation-header">
+        <div class="reclamation-info">
+          <span class="reclamation-id">REC-{{ r.id }}</span>
+          <span class="reclamation-date">{{ r.date | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <span class="status-badge" [class.ouvert]="r.statut === 'OUVERT'" [class.ferme]="r.statut === 'FERME'">
+          {{ r.statut }}
+        </span>
+      </div>
+      <div class="reclamation-product">
+        <span class="product-icon">📱</span>
+        <span class="product-name">{{ r.produit?.nom }}</span>
+      </div>
+      <div class="reclamation-desc">
+        {{ r.description }}
+      </div>
+    </div>
+    <div class="empty-state" *ngIf="filteredReclamations.length === 0">
+      <p>Vous n'avez aucune réclamation</p>
+    </div>
+  </div>
+
+  <div class="loading" *ngIf="loading">Chargement...</div>
+</div>

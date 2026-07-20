@@ -1,0 +1,67 @@
+<div class="login-page">
+  <div class="login-card">
+
+    <div class="form-box">
+      <a routerLink="/" class="back-home">← Retour</a>
+
+      <div class="logo-box">
+        <img src="logo.png" alt="RepairFlow" class="logo-img">
+      </div>
+      <h1 class="brand">RepairFlow</h1>
+      <p class="subtitle">Gestion des Réparations</p>
+
+      <!--<h2 class="form-title">Connexion à votre espace</h2>-->
+
+      <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+
+      <form (ngSubmit)="onLogin()">
+        <div class="field">
+          <label>Adresse email</label>
+          <div class="input-wrap">
+            <span class="icon-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3"/>
+                <path d="M2 7l10 6 10-6"/>
+              </svg>
+            </span>
+            <input
+              type="email"
+              [(ngModel)]="email"
+              name="email"
+              placeholder="votre@email.com"
+              required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Mot de passe</label>
+          <div class="input-wrap">
+            <span class="icon-left">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="10" width="16" height="10" rx="2"/>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+              </svg>
+            </span>
+            <input
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="••••••••"
+              required>
+            <button type="button" class="icon-right" (click)="togglePassword()">
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-login">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="10" width="16" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 0 1 7.4-2"/>
+          </svg>
+          Se Connecter
+        </button>
+      </form>
+    </div>
+
+  </div>
+</div>

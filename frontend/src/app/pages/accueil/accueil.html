@@ -1,0 +1,201 @@
+<div class="page" [class.dark]="isDark">
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="brand-mark">
+        <div class="logo-box">
+          <img src="logo.png" alt="RepairFlow" class="logo-img">
+        </div>
+        <span class="brand-name">RepairFlow</span>
+      </div>
+
+      <nav class="nav-links">
+        <a (click)="scrollTo('fonctionnalites')">Fonctionnalités</a>
+        <a (click)="scrollTo('comment-ca-marche')">Comment ça marche</a>
+        <a (click)="scrollTo('apropos')">À propos</a>
+      </nav>
+
+      <div class="navbar-actions">
+        <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDark ? 'Activer le mode clair' : 'Activer le mode sombre'">
+          <span *ngIf="!isDark">🌙</span>
+          <span *ngIf="isDark">☀️</span>
+        </button>
+        <button class="btn-primary btn-nav" (click)="goToLogin()">Se connecter →</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-blob blob-1"></div>
+    <div class="hero-blob blob-2"></div>
+    <div class="hero-blob blob-3"></div>
+
+    <div class="hero-inner">
+      <span class="eyebrow">● Suivi en temps réel de vos réparations</span>
+      <h1>Gérez votre atelier de<br><span class="text-accent">réparation</span> avec style</h1>
+      <p class="hero-sub">
+        Pour le réparateur : enregistrez les produits, suivez chaque réparation
+        et gérez les réclamations depuis un seul endroit. Pour le client : suivez
+        l'avancement de votre appareil en temps réel, sans appeler personne.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary btn-lg" (click)="goToLogin()">
+          🔓 Se connecter
+        </button>
+        <button class="btn-ghost btn-lg" (click)="scrollTo('fonctionnalites')">
+          Découvrir les fonctionnalités
+        </button>
+      </div>
+    </div>
+
+    <div class="mockup-wrap">
+      <div class="mockup">
+        <div class="mockup-topbar">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="mockup-url">app.repairflow.tn/dashboard</span>
+        </div>
+        <div class="mockup-body">
+          <aside class="mockup-side">
+            <div class="side-item active"></div>
+            <div class="side-item"></div>
+            <div class="side-item"></div>
+            <div class="side-item"></div>
+          </aside>
+          <div class="mockup-main">
+            <div class="mockup-cards">
+              <div class="mockup-card blue">📦<span>12</span></div>
+              <div class="mockup-card yellow">🔧<span>5</span></div>
+              <div class="mockup-card green">✅<span>8</span></div>
+              <div class="mockup-card red">📋<span>3</span></div>
+            </div>
+            <div class="mockup-rows">
+              <div class="mockup-row">
+                <span class="row-bar w-70"></span>
+                <span class="row-bar w-40"></span>
+                <span class="row-pill en-cours">EN COURS</span>
+              </div>
+              <div class="mockup-row">
+                <span class="row-bar w-55"></span>
+                <span class="row-bar w-30"></span>
+                <span class="row-pill pret">PRÊT</span>
+              </div>
+              <div class="mockup-row">
+                <span class="row-bar w-65"></span>
+                <span class="row-bar w-35"></span>
+                <span class="row-pill recu">REÇU</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat" *ngFor="let s of stats">
+        <div class="stat-value">{{ s.value }}</div>
+        <div class="stat-label">{{ s.label }}</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="fonctionnalites">
+    <div class="section-inner">
+      <span class="section-tag">FONCTIONNALITÉS</span>
+      <h2 class="section-title">Tout ce dont vous avez besoin</h2>
+      <p class="section-sub">Un outil complet pour les réparateurs modernes — de la réception du produit à sa restitution.</p>
+
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let f of features">
+          <div class="feature-icon" [ngClass]="f.color">{{ f.icon }}</div>
+          <h3>{{ f.title }}</h3>
+          <p>{{ f.desc }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="comment-ca-marche">
+    <div class="section-inner">
+      <span class="section-tag tag-green">COMMENT ÇA MARCHE</span>
+      <h2 class="section-title">Aussi simple que 1-2-3-4</h2>
+      <p class="section-sub">Commencez à utiliser RepairFlow en quelques minutes. Aucune formation nécessaire.</p>
+
+      <div class="steps-row">
+        <ng-container *ngFor="let step of steps; let i = index; let last = last">
+          <div class="step-card">
+            <div class="step-top">
+              <div class="step-icon">{{ step.icon }}</div>
+              <span class="step-number">0{{ i + 1 }}</span>
+            </div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.desc }}</p>
+          </div>
+          <div class="step-arrow" *ngIf="!last">→</div>
+        </ng-container>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="apropos">
+    <div class="section-inner">
+      <span class="section-tag">POUR QUI</span>
+      <h2 class="section-title">Fait pour votre atelier, simple pour vos clients</h2>
+      <p class="section-sub">RepairFlow s'adresse à deux publics : le réparateur qui gère l'atelier, et le client qui suit son appareil.</p>
+
+      <div class="roles-grid roles-grid-2">
+        <div class="role-card">
+          <div class="role-tag">Pour le réparateur</div>
+          <h3>Gérez votre atelier au quotidien</h3>
+          <p>Enregistrez les produits déposés, créez les comptes clients, mettez à jour le statut de chaque réparation et traitez les réclamations — le tout depuis un tableau de bord unique.</p>
+        </div>
+        <div class="role-card">
+          <div class="role-tag">Pour le client</div>
+          <h3>Suivez votre appareil sans appeler</h3>
+          <p>Connectez-vous avec les identifiants fournis par le réparateur pour consulter en temps réel le statut de votre appareil et ouvrir une réclamation si besoin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <h2>Prêt à moderniser votre atelier ?</h2>
+      <p>Réparateur ou client, accédez à votre espace RepairFlow — 100% gratuit, aucune carte bancaire requise.</p>
+      <button class="btn-cta" (click)="goToLogin()">🔓 Se connecter</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="brand-mark">
+          <div class="logo-box small">
+            <img src="logo.png" alt="RepairFlow" class="logo-img">
+          </div>
+          <span class="brand-name">RepairFlow</span>
+        </div>
+        <p>La solution de gestion pour les ateliers de réparation modernes.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Produit</h4>
+        <a (click)="scrollTo('fonctionnalites')">Fonctionnalités</a>
+        <a (click)="scrollTo('comment-ca-marche')">Comment ça marche</a>
+        <a (click)="goToLogin()">Se connecter</a>
+      </div>
+
+      <div class="footer-col">
+        <h4>Entreprise</h4>
+        <a (click)="scrollTo('apropos')">À propos</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 RepairFlow. Tous droits réservés.
+    </div>
+  </footer>
+
+</div>

@@ -1,0 +1,61 @@
+<div class="dashboard">
+  <div *ngIf="loading" class="loading" style="text-align: center; padding: 40px; color: #666;">
+    Chargement de votre tableau de bord...
+  </div>
+
+  <div class="dashboard-content" *ngIf="!loading">
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value">{{ stats?.totalProduits || 0 }}</div>
+        <div class="stat-label">Produits déposés</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon">🔧</div>
+        <div class="stat-value">{{ stats?.enCours || 0 }}</div>
+        <div class="stat-label">En cours de réparation</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats?.prets || 0 }}</div>
+        <div class="stat-label">Prêts à récupérer</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon">📝</div>
+        <div class="stat-value">{{ stats?.reclamations || 0 }}</div>
+        <div class="stat-label">Réclamations</div>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="chart-card">
+        <h3>🔄 Statut de mes produits</h3>
+        <div class="status-list" *ngIf="stats.totalProduits > 0">
+          <div class="status-item" *ngFor="let stat of produitsParStatut | keyvalue">
+            <span class="status-dot" [class]="stat.key.toString().toLowerCase()"></span>
+            <span class="status-name">{{ statutLabels[stat.key] || stat.key }}</span>
+            <span class="status-value">{{ stat.value }}</span>
+          </div>
+        </div>
+        <div class="empty-chart" *ngIf="stats.totalProduits === 0">Aucun produit déposé pour le moment</div>
+      </div>
+
+      <div class="chart-card">
+        <h3>🕓 Mes derniers produits</h3>
+        <div class="recent-list" *ngIf="produitsRecents.length > 0">
+          <div class="recent-item" *ngFor="let p of produitsRecents">
+            <div class="recent-info">
+              <span class="recent-name">{{ p.nom }}</span>
+              <span class="recent-cat">{{ p.categorie?.libelle || 'Non catégorisé' }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="statutClass(p)">
+              <span class="status-dot"></span>
+              {{ statutLabels[p.statut] || p.statut }}
+            </span>
+          </div>
+        </div>
+        <div class="empty-chart" *ngIf="produitsRecents.length === 0">Aucun produit déposé pour le moment</div>
+      </div>
+    </div>
+  </div>
+</div>

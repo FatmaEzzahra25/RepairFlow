@@ -1,0 +1,21 @@
+<header class="navbar">
+  <div class="navbar-left">
+    <h1 class="page-title">{{ pageTitle }}</h1>
+    <p class="page-subtitle">{{ pageSubtitle }}</p>
+  </div>
+
+  <div class="navbar-right">
+    <!--<button class="icon-btn" (click)="toggleDarkMode()">
+      <span>{{ darkMode ? '☀️' : '🌙' }}</span>
+    </button>
+    <button class="icon-btn notification">
+      <span>🔔</span>
+      <span class="badge" *ngIf="notifications > 0">{{ notifications }}</span>
+    </button>-->
+    <div class="user-menu">
+      <div class="avatar">👤</div>
+      <span class="user-name">Réparateur</span>
+      <button class="logout-btn" (click)="logout()">→</button>
+    </div>
+  </div>
+</header>

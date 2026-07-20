@@ -1,0 +1,9 @@
+<div class="admin-layout">
+  <app-sidebar (collapsedChange)="onSidebarCollapsed($event)"></app-sidebar>
+  <div class="main-content" [class.collapsed]="isSidebarCollapsed">
+    <app-navbar></app-navbar>
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

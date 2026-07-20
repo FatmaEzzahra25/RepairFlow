@@ -1,0 +1,74 @@
+<div class="produits-page">
+  <div class="page-header">
+    <div>
+      <h1>📦 Produits</h1>
+      <p>Tous les produits déposés, tous réparateurs confondus</p>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <select class="filter-select" [(ngModel)]="selectedReparateurId">
+      <option value="TOUS">Tous les réparateurs</option>
+      <option *ngFor="let r of reparateurs" [value]="r.id">{{ r.nom }}</option>
+    </select>
+    <select class="filter-select" [(ngModel)]="statutFilter">
+      <option value="TOUS">Tous les statuts</option>
+      <option value="RECU">Reçu</option>
+      <option value="EN_COURS">En cours</option>
+      <option value="REPARE">Réparé</option>
+      <option value="PRET">Prêt</option>
+    </select>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un produit, client...">
+    </div>
+    <button class="btn-reset" (click)="resetFilters()">↻ Réinitialiser</button>
+  </div>
+
+  <div class="loading-state" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
+    <p>Chargement des produits...</p>
+  </div>
+
+  <div class="table-container" *ngIf="!loading">
+    <table class="produits-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Produit</th>
+        <th>Client</th>
+        <th>Réparateur</th>
+        <th>Catégorie</th>
+        <th>Statut</th>
+        <th>Déposé le</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let p of filteredProduits; let i = index">
+        <td class="cell-id">{{ i + 1 }}</td>
+        <td class="cell-name">{{ p.nom }}</td>
+        <td>{{ clientNom(p) }}</td>
+        <td>{{ reparateurNom(p) }}</td>
+        <td>
+          <span class="category-badge">{{ p.categorie?.libelle || 'Non catégorisé' }}</span>
+        </td>
+        <td>
+          <span class="status-badge" [ngClass]="statutClass(p)">
+            <span class="status-dot"></span>
+            {{ statutLabels[p.statut] || p.statut }}
+          </span>
+        </td>
+        <td class="cell-date">{{ p.dateDepot ? (p.dateDepot | date:'dd/MM/yyyy') : '—' }}</td>
+      </tr>
+
+      <tr *ngIf="filteredProduits.length === 0">
+        <td colspan="7" class="empty-state">
+          <div class="empty-content" style="text-align: center; padding: 30px; color: #888;">
+            <span class="empty-icon" style="font-size: 24px;">📭</span>
+            <p>Aucun produit trouvé</p>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div class="dashboard">
+  <div *ngIf="loading" class="loading" style="text-align: center; padding: 40px; color: #666;">
+    Chargement du tableau de bord...
+  </div>
+
+  <div class="dashboard-content" *ngIf="!loading">
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">{{ stats?.totalUtilisateurs || 0 }}</div>
+        <div class="stat-label">Utilisateurs</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">🔧</div>
+        <div class="stat-value">{{ stats?.totalReparateurs || 0 }}</div>
+        <div class="stat-label">Réparateurs</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value">{{ stats?.totalProduits || 0 }}</div>
+        <div class="stat-label">Produits</div>
+      </div>
+    </div>
+
+
+    <div class="bottom-section">
+      <div class="chart-card">
+        <h3>📦 Produits par catégorie</h3>
+        <div class="category-bars">
+          <div class="bar-item" *ngFor="let cat of stats?.produitsParCategorie | keyvalue">
+            <span class="bar-label">{{ cat.key }}</span>
+            <div class="bar">
+              <div class="bar-fill" [style.width.%]="stats?.totalProduits ? (cat.value / stats.totalProduits) * 100 : 0"></div>
+            </div>
+            <span class="bar-value">{{ cat.value }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>🔄 Statuts des produits</h3>
+        <div class="status-list">
+          <div class="status-item" *ngFor="let stat of stats?.produitsParStatut | keyvalue">
+            <span class="status-dot" [class]="stat.key.toString().toLowerCase()"></span>
+            <span class="status-name">{{ stat.key }}</span>
+            <span class="status-value">{{ stat.value }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="charts-section">
+    <div class="chart-card">
+      <h3>📈 Activité des 15 derniers jours</h3>
+      <div class="activity-chart">
+        <div class="activity-bar-wrap" *ngFor="let jour of stats?.activiteParJour | keyvalue" [title]="jour.key.toString() + ' : ' + jour.value + ' produit(s)'">
+          <div class="activity-bar" [style.height.%]="getBarHeight(+jour.value)"></div>
+        </div>
+      </div>
+      <div class="activity-legend">
+        <span>{{ getFirstDay() }}</span>
+        <span>Aujourd'hui</span>
+      </div>
+    </div>
+  </div>
+
+</div>

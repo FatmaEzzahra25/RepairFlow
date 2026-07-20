@@ -1,0 +1,131 @@
+.reclamations-page {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1E293B;
+  margin: 0;
+}
+
+.page-header p {
+  font-size: 13px;
+  color: #64748B;
+  margin: 4px 0 0 0;
+}
+
+.filters-bar {
+  margin-bottom: 20px;
+}
+
+.filter-select {
+  height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 14px;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+}
+
+.reclamations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reclamation-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.reclamation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.reclamation-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.reclamation-id {
+  font-family: monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+}
+
+.reclamation-date {
+  font-size: 13px;
+  color: #94A3B8;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-badge.ouvert {
+  background: #ECFDF5;
+  color: #10B981;
+}
+
+.status-badge.ferme {
+  background: #FEF2F2;
+  color: #EF4444;
+}
+
+.reclamation-product {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.product-icon {
+  font-size: 20px;
+}
+
+.product-name {
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.reclamation-desc {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+  color: #64748B;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+}
+
+.loading {
+  text-align: center;
+  padding: 60px;
+  color: #64748B;
+}
+
+

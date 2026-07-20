@@ -1,0 +1,98 @@
+<div class="categories-page">
+  <div class="page-header">
+    <div>
+      <h1>📁 Catégories de Produits</h1>
+      <p>Gérez les catégories d'équipements</p>
+    </div>
+    <button class="btn-primary" (click)="openModal()">
+      <span>+</span> Ajouter
+    </button>
+  </div>
+
+  <div class="loading-state" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
+    <p>Chargement des catégories...</p>
+  </div>
+
+  <div class="table-container" *ngIf="!loading">
+    <table class="categories-table">
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Nb. Produits</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let cat of categories; let i = index">
+        <td class="cell-id">{{ i + 1 }}</td>
+        <td class="cell-name">
+          <div class="category-info">
+            <div class="category-avatar">{{ cat.libelle?.charAt(0) || 'C' }}</div>
+            <span>{{ cat.libelle }}</span>
+          </div>
+        </td>
+        <td class="cell-desc">{{ cat.description || '—' }}</td>
+        <td>
+          <span class="count-badge">{{ cat.nbProduits || 0 }}</span>
+        </td>
+        <td class="cell-actions">
+          <button class="btn-action edit" (click)="editCategory(cat)" title="Modifier">
+            ✏️
+          </button>
+         <!--<button class="btn-action delete" (click)="deleteCategory(cat.id)" title="Supprimer">
+            🗑️
+          </button>-->
+        </td>
+      </tr>
+
+      <tr *ngIf="categories.length === 0">
+        <td colspan="5" class="empty-state">
+          <div class="empty-content" style="text-align: center; padding: 30px; color: #888;">
+            <span class="empty-icon" style="font-size: 24px;">📭</span>
+            <p>Aucune catégorie trouvée</p>
+            <button class="btn-primary" (click)="openModal()">Ajouter une catégorie</button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>{{ isEditing ? '✏️ Modifier la Catégorie' : '➕ Ajouter une Catégorie' }}</h3>
+        <button class="modal-close" (click)="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Nom de la catégorie</label>
+          <input
+            type="text"
+            [(ngModel)]="categoryForm.libelle"
+            required
+            placeholder="Nom de la catégorie.."
+            (keyup.enter)="categoryForm.libelle && categoryForm.description && saveCategory()">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea
+            [(ngModel)]="categoryForm.description"
+            required
+            rows="3"
+            placeholder="Description de la catégorie..."
+            (keyup.enter)="categoryForm.libelle && categoryForm.description && saveCategory()"></textarea>
+        </div>
+        <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Annuler</button>
+        <button class="btn-primary" (click)="saveCategory()" [disabled]="!categoryForm.libelle">
+          {{ isEditing ? 'Enregistrer' : 'Ajouter' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

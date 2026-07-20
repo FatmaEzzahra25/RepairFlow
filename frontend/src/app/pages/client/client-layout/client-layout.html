@@ -1,0 +1,9 @@
+<div class="client-layout">
+  <app-client-sidebar (collapsedChange)="onSidebarCollapsed($event)"></app-client-sidebar>
+  <div class="main-content" [class.collapsed]="isSidebarCollapsed">
+    <app-client-navbar></app-client-navbar>
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

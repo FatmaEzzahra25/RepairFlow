@@ -1,0 +1,78 @@
+<div class="dashboard">
+  <div *ngIf="loading" class="loading" style="text-align: center; padding: 40px; color: #666;">
+    Chargement du tableau de bord...
+  </div>
+
+  <div class="dashboard-content" *ngIf="!loading">
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value">{{ stats?.totalProduits || 0 }}</div>
+        <div class="stat-label">Produits enregistrés</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon">🔧</div>
+        <div class="stat-value">{{ stats?.produitsEnCours || 0 }}</div>
+        <div class="stat-label">En cours de réparation</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats?.produitsRepares || 0 }}</div>
+        <div class="stat-label">Produits réparés</div>
+      </div>
+      <div class="stat-card purple">
+        <div class="stat-icon">👤</div>
+        <div class="stat-value">{{ stats?.totalClients || 0 }}</div>
+        <div class="stat-label">Clients</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon">📝</div>
+        <div class="stat-value">{{ stats?.reclamationsOuvertes || 0 }}</div>
+        <div class="stat-label">Réclamations ouvertes</div>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="chart-card">
+        <h3>📦 Produits par catégorie</h3>
+        <div class="category-bars" *ngIf="totalProduitsCategorie > 0">
+          <div class="bar-item" *ngFor="let cat of produitsParCategorie | keyvalue">
+            <span class="bar-label">{{ cat.key }}</span>
+            <div class="bar">
+              <div class="bar-fill" [style.width.%]="(cat.value / totalProduitsCategorie) * 100"></div>
+            </div>
+            <span class="bar-value">{{ cat.value }}</span>
+          </div>
+        </div>
+        <div class="empty-chart" *ngIf="totalProduitsCategorie === 0">Aucun produit enregistré</div>
+      </div>
+
+      <div class="chart-card">
+        <h3>🔄 Statuts des produits</h3>
+        <div class="status-list" *ngIf="totalProduitsCategorie > 0">
+          <div class="status-item" *ngFor="let stat of produitsParStatut | keyvalue">
+            <span class="status-dot" [class]="stat.key.toString().toLowerCase()"></span>
+            <span class="status-name">{{ stat.key }}</span>
+            <span class="status-value">{{ stat.value }}</span>
+          </div>
+        </div>
+        <div class="empty-chart" *ngIf="totalProduitsCategorie === 0">Aucun produit enregistré</div>
+      </div>
+    </div>
+
+    <div class="charts-section">
+      <div class="chart-card">
+        <h3>📈 Activité des 15 derniers jours</h3>
+        <div class="activity-chart">
+          <div class="activity-bar-wrap" *ngFor="let jour of activiteParJour | keyvalue" [title]="jour.key.toString() + ' : ' + jour.value + ' produit(s)'">
+            <div class="activity-bar" [style.height.%]="getBarHeight(+jour.value)"></div>
+          </div>
+        </div>
+        <div class="activity-legend">
+          <span>{{ getFirstDay() }}</span>
+          <span>Aujourd'hui</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,187 @@
+<div class="produits-page">
+  <div class="page-header">
+    <div>
+      <h1>📦 Gestion des Produits</h1>
+      <p>Enregistrez et suivez les produits en réparation</p>
+    </div>
+    <button class="btn-primary" (click)="openAddModal()">
+      <span>+</span> Nouveau Produit
+    </button>
+  </div>
+
+  <div class="filters-bar">
+    <select class="filter-select" [(ngModel)]="statusFilter">
+      <option value="TOUS">Tous les statuts</option>
+      <option value="RECU">Reçu</option>
+      <option value="EN_COURS">En cours</option>
+      <option value="REPARE">Réparé</option>
+      <option value="PRET">Prêt</option>
+    </select>
+    <select class="filter-select" [(ngModel)]="categoryFilter">
+      <option value="TOUS">Toutes les catégories</option>
+      <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.libelle }}</option>
+    </select>
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher un produit, client...">
+    </div>
+    <button class="btn-reset" (click)="resetFilters()">↻ Réinitialiser</button>
+  </div>
+
+  <div class="loading-state" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
+    <p>Chargement des produits...</p>
+  </div>
+
+  <div class="table-card" *ngIf="!loading">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>DATE DÉPÔT</th>
+        <th>CLIENT</th>
+        <th>PRODUIT</th>
+        <th>CATÉGORIE</th>
+        <th>STATUT</th>
+        <th>ACTIONS</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let p of filteredProduits">
+        <td class="id-cell">#{{ p.id }}</td>
+        <td>{{ p.dateDepot | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <div class="user-info">
+            <div class="user-avatar">{{ p.client?.prenom?.[0] }}{{ p.client?.nom?.[0] }}</div>
+            <span class="user-name">{{ p.client?.prenom }} {{ p.client?.nom }}</span>
+          </div>
+        </td>
+        <td class="product-name">{{ p.nom }}</td>
+        <td>
+          <span class="category-badge">{{ p.categorie?.libelle || '—' }}</span>
+        </td>
+        <td>
+            <span class="status-badge" [style.background]="getStatusColor(p.statut) + '20'" [style.color]="getStatusColor(p.statut)">
+              <span class="status-dot" [style.background]="getStatusColor(p.statut)"></span>
+              {{ getStatusLabel(p.statut) }}
+            </span>
+        </td>
+        <td>
+          <div class="actions">
+            <select class="status-select" [(ngModel)]="p.statut" (change)="updateStatut(p.id, p.statut)">
+              <option *ngFor="let s of statuts" [value]="s">{{ getStatusLabel(s) }}</option>
+            </select>
+            <button class="btn-icon view" title="Voir détails" (click)="openViewModal(p)">👁</button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="filteredProduits.length === 0">
+        <td colspan="7" class="empty-state" style="text-align: center; padding: 30px; color: #888;">Aucun produit trouvé</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal modal-large" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>📦 Nouveau Produit</h2>
+        <button class="modal-close" (click)="closeModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <!--<div class="photo-upload">
+          <div class="upload-zone">
+            <span class="upload-icon">📷</span>
+            <p>Glisser-déposer ou cliquer pour ajouter une photo du produit</p>
+          </div>
+        </div>-->
+
+        <div class="form-group">
+          <label>Nom du produit *</label>
+          <input type="text" [(ngModel)]="formData.nom" placeholder="Nom du produit" required>
+        </div>
+
+        <div class="form-group">
+          <label>Description de la panne *</label>
+          <textarea [(ngModel)]="formData.descriptionPanne" placeholder="Écran cassé, ne s'allume plus..." maxlength="500" rows="4" required></textarea>
+          <span class="char-count">{{ formData.descriptionPanne.length || 0 }}/500</span>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label>Client *</label>
+            <select [(ngModel)]="formData.clientEmail" required>
+              <option value="">Sélectionner un client...</option>
+              <option *ngFor="let c of clients" [value]="c.email">{{ c.prenom }} {{ c.nom }} ({{ c.email }})</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Catégorie *</label>
+            <select [(ngModel)]="formData.categorieId" required>
+              <option [ngValue]="null">Sélectionner une catégorie</option>
+              <option *ngFor="let cat of categories" [ngValue]="cat.id">{{ cat.libelle }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">Annuler</button>
+        <button class="btn-primary" (click)="saveProduit()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="viewingProduit" (click)="closeViewModal()">
+    <div class="modal modal-large" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>👁️ Détails du produit</h2>
+        <button class="modal-close" (click)="closeViewModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label>Produit</label>
+            <p>{{ viewingProduit?.nom }}</p>
+          </div>
+          <div class="form-group">
+            <label>Catégorie</label>
+            <p>{{ viewingProduit?.categorie?.libelle || '—' }}</p>
+          </div>
+        </div>
+
+        <div class="form-row two-col">
+          <div class="form-group">
+            <label>Client</label>
+            <p>{{ viewingProduit?.client?.prenom }} {{ viewingProduit?.client?.nom }} ({{ viewingProduit?.client?.email }})</p>
+          </div>
+          <div class="form-group">
+            <label>Date de dépôt</label>
+            <p>{{ viewingProduit?.dateDepot | date:'dd/MM/yyyy' }}</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Description de la panne</label>
+          <p>{{ viewingProduit?.descriptionPanne }}</p>
+        </div>
+
+        <div class="form-group">
+          <label>Statut</label>
+          <span class="status-badge" [style.background]="getStatusColor(viewingProduit?.statut) + '20'" [style.color]="getStatusColor(viewingProduit?.statut)">
+            <span class="status-dot" [style.background]="getStatusColor(viewingProduit?.statut)"></span>
+            {{ getStatusLabel(viewingProduit?.statut) }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label>Observation</label>
+          <textarea [(ngModel)]="observationInput" placeholder="Ajouter une observation..." rows="3"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeViewModal()">Fermer</button>
+        <button class="btn-primary" (click)="saveObservation()">Enregistrer l'observation</button>
+      </div>
+    </div>
+  </div>
+</div>

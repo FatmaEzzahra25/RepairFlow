@@ -1,0 +1,52 @@
+# ===== Secrets =====
+backend/src/main/resources/application.yml
+backend/src/main/resources/application-local.yml
+
+# ===== Backend (Spring Boot / Maven) =====
+backend/HELP.md
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+!backend/**/src/main/**/target/
+!backend/**/src/test/**/target/
+backend/.classpath
+backend/.factorypath
+backend/.project
+backend/.settings/
+backend/.springBeans
+backend/.sts4-cache
+*.iws
+*.iml
+*.ipr
+
+# ===== Frontend (Angular) =====
+frontend/node_modules/
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/bazel-out/
+frontend/.angular/cache/
+frontend/.sass-cache/
+frontend/connect.lock
+frontend/coverage/
+frontend/libpeerconnection.log
+frontend/testem.log
+frontend/typings/
+frontend/__screenshots__/
+npm-debug.log
+yarn-error.log
+
+# ===== IDEs / editors =====
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+*.launch
+.c9/
+.sublime-workspace
+
+# ===== System files =====
+.DS_Store
+Thumbs.db

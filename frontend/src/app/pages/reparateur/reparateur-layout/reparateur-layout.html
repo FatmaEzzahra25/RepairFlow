@@ -1,0 +1,9 @@
+<div class="reparateur-layout">
+  <app-reparateur-sidebar (collapsedChange)="onSidebarCollapsed($event)"></app-reparateur-sidebar>
+  <div class="main-content" [class.collapsed]="isSidebarCollapsed">
+    <app-reparateur-navbar></app-reparateur-navbar>
+    <div class="page-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
