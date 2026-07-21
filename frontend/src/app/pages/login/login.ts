@@ -1,9 +1,11 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
 import { AuthService } from '../../core/services/auth';
+import { ThemeService } from '../../core/services/theme';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +23,7 @@ export class LoginComponent {
   constructor(
     private auth: AuthService,
     private router: Router,
+    public theme: ThemeService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 

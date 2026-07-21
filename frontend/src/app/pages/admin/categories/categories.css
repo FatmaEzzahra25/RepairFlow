@@ -12,13 +12,13 @@
 .page-header h1 {
   font-size: 22px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .page-header p {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--text-muted);
   margin: 4px 0 0 0;
 }
 
@@ -50,8 +50,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #F3F4F6;
-  color: #374151;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
   border: none;
   padding: 12px 20px;
   border-radius: 12px;
@@ -62,13 +62,13 @@
 }
 
 .btn-secondary:hover {
-  background: #E5E7EB;
+  background: var(--border-color);
 }
 
 .table-container {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--border-color);
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
@@ -80,29 +80,29 @@
 }
 
 .categories-table thead {
-  background: #F9FAFB;
+  background: var(--bg-tertiary);
 }
 
 .categories-table th {
   padding: 14px 20px;
   text-align: left;
   font-weight: 600;
-  color: #6B7280;
+  color: var(--text-muted);
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid #E5E7EB;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .categories-table td {
   padding: 14px 20px;
-  border-bottom: 1px solid #F3F4F6;
-  color: #374151;
+  border-bottom: 1px solid var(--bg-secondary);
+  color: var(--text-secondary);
   vertical-align: middle;
 }
 
 .categories-table tbody tr:hover {
-  background: #FAFBFF;
+  background: var(--bg-tertiary);
 }
 
 .categories-table tbody tr:last-child td {
@@ -110,14 +110,14 @@
 }
 
 .cell-id {
-  color: #9CA3AF;
+  color: var(--text-faint);
   font-weight: 500;
   width: 50px;
 }
 
 .cell-name {
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .category-info {
@@ -140,7 +140,7 @@
 }
 
 .cell-desc {
-  color: #6B7280;
+  color: var(--text-muted);
   max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -181,7 +181,7 @@
 }
 
 .btn-action:hover {
-  background: #F3F4F6;
+  background: var(--bg-secondary);
 }
 
 .btn-action.edit:hover {
@@ -210,7 +210,7 @@
 }
 
 .empty-content p {
-  color: #9CA3AF;
+  color: var(--text-faint);
   font-size: 15px;
   margin: 0;
 }
@@ -232,7 +232,7 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 20px;
   width: 100%;
   max-width: 440px;
@@ -247,14 +247,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid var(--bg-secondary);
 }
 
 .modal-header h3 {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
 }
 
 .modal-close {
@@ -262,8 +262,8 @@
   height: 32px;
   border-radius: 8px;
   border: none;
-  background: #F3F4F6;
-  color: #6B7280;
+  background: var(--bg-secondary);
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -273,8 +273,8 @@
 }
 
 .modal-close:hover {
-  background: #E5E7EB;
-  color: #374151;
+  background: var(--border-color);
+  color: var(--text-secondary);
 }
 
 .modal-body {
@@ -293,20 +293,20 @@
 .form-group label {
   font-size: 13px;
   font-weight: 600;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .form-group input,
 .form-group textarea {
   height: 44px;
   padding: 0 14px;
-  border: 1.5px solid #E5E7EB;
+  border: 1.5px solid var(--border-color);
   border-radius: 10px;
   font-size: 14px;
-  color: #111827;
+  color: var(--text-primary);
   outline: none;
   transition: all 0.2s;
-  background: white;
+  background: var(--bg-primary);
   width: 100%;
   box-sizing: border-box;
 }
@@ -329,8 +329,8 @@
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 24px;
-  border-top: 1px solid #F3F4F6;
-  background: #FAFBFF;
+  border-top: 1px solid var(--bg-secondary);
+  background: var(--bg-tertiary);
 }
 
 .error-msg {
@@ -341,6 +341,25 @@
   font-size: 13px;
   margin-bottom: 16px;
   border: 1px solid #FECACA;
+}
+
+html.dark-mode .count-badge {
+  background: rgba(37, 99, 235, 0.18);
+  color: #60A5FA;
+}
+
+html.dark-mode .btn-action.edit:hover {
+  background: rgba(37, 99, 235, 0.18);
+}
+
+html.dark-mode .btn-action.delete:hover {
+  background: rgba(239, 68, 68, 0.18);
+}
+
+html.dark-mode .error-msg {
+  background: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border-color: rgba(239, 68, 68, 0.3);
 }
 
 @keyframes fadeIn {

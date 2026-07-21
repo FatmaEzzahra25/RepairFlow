@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #F3F4F6;
+  background: var(--bg-secondary);
   padding: 24px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   position: relative;
@@ -28,7 +28,7 @@ a.back-home:active {
   gap: 4px;
   font-size: 12.5px;
   font-weight: 500;
-  color: #6B7280;
+  color: var(--text-muted);
   text-decoration: none;
   transition: color 0.2s ease;
 }
@@ -55,7 +55,7 @@ a.back-home:hover {
 .brand {
   font-size: 22px;
   font-weight: 700;
-  color: #111827;
+  color: var(--text-primary);
   margin-bottom: 4px;
   letter-spacing: -0.5px;
   text-align: center;
@@ -63,24 +63,24 @@ a.back-home:hover {
 
 .subtitle {
   font-size: 13px;
-  color: #6B7280;
+  color: var(--text-muted);
   margin-bottom: 24px;
   text-align: center;
 }
 
 .form-box {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 10px 40px rgba(0,0,0,0.06);
-  border: 1px solid #E5E7EB;
+  border: 1px solid var(--border-color);
   text-align: left;
 }
 
 .form-title {
   font-size: 17px;
   font-weight: 600;
-  color: #111827;
+  color: var(--text-primary);
   margin-bottom: 20px;
 }
 
@@ -94,6 +94,12 @@ a.back-home:hover {
   border: 1px solid #FECACA;
 }
 
+html.dark-mode .error-msg {
+  background: rgba(239, 68, 68, 0.15);
+  color: #F87171;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
 .field {
   margin-bottom: 18px;
 }
@@ -102,7 +108,7 @@ a.back-home:hover {
   display: block;
   font-size: 13px;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
   margin-bottom: 8px;
 }
 
@@ -116,22 +122,22 @@ a.back-home:hover {
   width: 100%;
   height: 46px;
   padding: 0 14px 0 42px;
-  border: 1.5px solid #E5E7EB;
+  border: 1.5px solid var(--border-color);
   border-radius: 12px;
   font-size: 14px;
-  color: #111827;
-  background: #FAFAFA;
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
   transition: all 0.2s ease;
   outline: none;
 }
 
 .input-wrap input::placeholder {
-  color: #9CA3AF;
+  color: var(--text-faint);
 }
 
 .input-wrap input:focus {
   border-color: #2563EB;
-  background: white;
+  background: var(--bg-primary);
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
@@ -141,7 +147,7 @@ a.back-home:hover {
   z-index: 1;
   display: flex;
   align-items: center;
-  color: #9CA3AF;
+  color: var(--text-faint);
 }
 
 .icon-left svg {
@@ -156,12 +162,12 @@ a.back-home:hover {
   border: none;
   cursor: pointer;
   font-size: 15px;
-  color: #9CA3AF;
+  color: var(--text-faint);
   padding: 0;
 }
 
 .icon-right:hover {
-  color: #6B7280;
+  color: var(--text-muted);
 }
 
 .btn-login {

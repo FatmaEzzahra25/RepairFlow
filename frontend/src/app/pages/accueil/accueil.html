@@ -1,10 +1,10 @@
-<div class="page" [class.dark]="isDark">
+<div class="page" [class.dark]="theme.darkMode()">
 
   <header class="navbar">
     <div class="navbar-inner">
       <div class="brand-mark">
         <div class="logo-box">
-          <img src="logo.png" alt="RepairFlow" class="logo-img">
+          <img [src]="theme.darkMode() ? 'logo-white.png' : 'logo.png'" alt="RepairFlow" class="logo-img">
         </div>
         <span class="brand-name">RepairFlow</span>
       </div>
@@ -16,9 +16,9 @@
       </nav>
 
       <div class="navbar-actions">
-        <button class="theme-toggle" (click)="toggleTheme()" [attr.aria-label]="isDark ? 'Activer le mode clair' : 'Activer le mode sombre'">
-          <span *ngIf="!isDark">🌙</span>
-          <span *ngIf="isDark">☀️</span>
+        <button class="theme-toggle" (click)="theme.toggle()" [attr.aria-label]="theme.darkMode() ? 'Activer le mode clair' : 'Activer le mode sombre'">
+          <span *ngIf="!theme.darkMode()">🌙</span>
+          <span *ngIf="theme.darkMode()">☀️</span>
         </button>
         <button class="btn-primary btn-nav" (click)="goToLogin()">Se connecter →</button>
       </div>
@@ -164,7 +164,7 @@
   <section class="cta">
     <div class="cta-inner">
       <h2>Prêt à moderniser votre atelier ?</h2>
-      <p>Réparateur ou client, accédez à votre espace RepairFlow — 100% gratuit, aucune carte bancaire requise.</p>
+      <p>Réparateur ou client, accédez à votre espace RepairFlow.</p>
       <button class="btn-cta" (click)="goToLogin()">🔓 Se connecter</button>
     </div>
   </section>

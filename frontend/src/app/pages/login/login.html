@@ -5,7 +5,7 @@
       <a routerLink="/" class="back-home">← Retour</a>
 
       <div class="logo-box">
-        <img src="logo.png" alt="RepairFlow" class="logo-img">
+        <img [src]="theme.darkMode() ? 'logo-white.png' : 'logo.png'" alt="RepairFlow" class="logo-img">
       </div>
       <h1 class="brand">RepairFlow</h1>
       <p class="subtitle">Gestion des Réparations</p>

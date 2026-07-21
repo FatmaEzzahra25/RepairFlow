@@ -1,7 +1,7 @@
-import { Component, signal, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { isPlatformBrowser } from '@angular/common';
 import { ToastComponent } from './shared/components/toast/toast';
+import { ThemeService } from './core/services/theme';
 
 @Component({
   selector: 'app-root',
@@ -9,16 +9,8 @@ import { ToastComponent } from './shared/components/toast/toast';
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   protected readonly title = signal('frontend');
-  isDarkMode = false;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
-
-  ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      const saved = localStorage.getItem('darkMode');
-      this.isDarkMode = saved === 'true';
-    }
-  }
+  constructor(public theme: ThemeService) {}
 }

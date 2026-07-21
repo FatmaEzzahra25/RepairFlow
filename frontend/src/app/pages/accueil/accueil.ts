@@ -1,6 +1,9 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { ThemeService } from '../../core/services/theme';
 
 @Component({
   selector: 'app-accueil',
@@ -10,8 +13,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./accueil.css']
 })
 export class AccueilComponent {
-
-  isDark = false;
 
   stats = [
     { value: '3', label: 'Espaces utilisateurs' },
@@ -84,20 +85,9 @@ export class AccueilComponent {
 
   constructor(
     private router: Router,
+    public theme: ThemeService,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {
-    if (isPlatformBrowser(this.platformId)) {
-      const saved = localStorage.getItem('rf-theme');
-      this.isDark = saved === 'dark';
-    }
-  }
-
-  toggleTheme(): void {
-    this.isDark = !this.isDark;
-    if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem('rf-theme', this.isDark ? 'dark' : 'light');
-    }
-  }
+  ) {}
 
   goToLogin(): void {
     this.router.navigate(['/login']);

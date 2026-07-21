@@ -5,3 +5,34 @@ html,body{
   padding: 0px;
 
 }
+
+:root {
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F3F4F6;
+  --bg-tertiary: #F9FAFB;
+  --border-color: #E5E7EB;
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6B7280;
+  --text-faint: #9CA3AF;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --topbar-height: 78px;
+
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+html.dark-mode {
+  --bg-primary: #1C212B;
+  --bg-secondary: #14181F;
+  --bg-tertiary: #242A35;
+  --border-color: #2E3542;
+  --text-primary: #E3E6EA;
+  --text-secondary: #B8BEC9;
+  --text-muted: #8B93A1;
+  --text-faint: #6B7280;
+  --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
+html.dark-mode body {
+  background-color: var(--bg-secondary);
+}
