@@ -5,7 +5,7 @@ import { ThemeService } from './core/services/theme';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ToastComponent],  // ← ToastComponent, pas ToastService
+  imports: [RouterOutlet, ToastComponent], 
   templateUrl: './app.html',
   styleUrls: ['./app.css']
 })
