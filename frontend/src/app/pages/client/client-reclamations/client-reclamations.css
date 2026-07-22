@@ -10,13 +10,13 @@
 .page-header h1 {
   font-size: 22px;
   font-weight: 700;
-  color: #1E293B;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .page-header p {
   font-size: 13px;
-  color: #64748B;
+  color: var(--text-muted);
   margin: 4px 0 0 0;
 }
 
@@ -27,11 +27,11 @@
 .filter-select {
   height: 44px;
   padding: 0 16px;
-  border: 1.5px solid #E2E8F0;
+  border: 1.5px solid var(--border-color);
   border-radius: 10px;
   font-size: 14px;
-  background: white;
-  color: #374151;
+  background: var(--bg-primary);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -42,10 +42,10 @@
 }
 
 .reclamation-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
   padding: 20px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--border-color);
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
@@ -66,12 +66,12 @@
   font-family: monospace;
   font-size: 13px;
   font-weight: 600;
-  color: #64748B;
+  color: var(--text-muted);
 }
 
 .reclamation-date {
   font-size: 13px;
-  color: #94A3B8;
+  color: var(--text-faint);
 }
 
 .status-badge {
@@ -91,6 +91,16 @@
   color: #EF4444;
 }
 
+html.dark-mode .status-badge.ouvert {
+  background: rgba(16, 185, 129, 0.18);
+  color: #6EE7B7;
+}
+
+html.dark-mode .status-badge.ferme {
+  background: rgba(239, 68, 68, 0.18);
+  color: #FCA5A5;
+}
+
 .reclamation-product {
   display: flex;
   align-items: center;
@@ -104,28 +114,26 @@
 
 .product-name {
   font-weight: 600;
-  color: #1E293B;
+  color: var(--text-primary);
 }
 
 .reclamation-desc {
   font-size: 14px;
-  color: #374151;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
 .empty-state {
   text-align: center;
   padding: 60px;
-  color: #64748B;
-  background: white;
+  color: var(--text-muted);
+  background: var(--bg-primary);
   border-radius: 16px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--border-color);
 }
 
 .loading {
   text-align: center;
   padding: 60px;
-  color: #64748B;
+  color: var(--text-muted);
 }
-
-

@@ -1,7 +1,7 @@
 .reparateur-layout {
   display: flex;
   min-height: 100vh;
-  background: #F1F5F9;
+  background: var(--bg-secondary);
 }
 
 .main-content {

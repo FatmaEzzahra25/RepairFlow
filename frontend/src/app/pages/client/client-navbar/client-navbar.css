@@ -2,22 +2,24 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  background: white;
-  border-bottom: 1px solid #E2E8F0;
+  height: var(--topbar-height);
+  box-sizing: border-box;
+  padding: 0 32px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .page-title {
   font-size: 20px;
   font-weight: 700;
-  color: #1E293B;
+  color: var(--text-primary);
   margin: 0;
 }
 
 .page-subtitle {
   font-size: 13px;
-  color: #64748B;
+  color: var(--text-muted);
   margin: 4px 0 0 0;
 }
 
@@ -31,8 +33,8 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  border: 1px solid #E2E8F0;
-  background: white;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -43,7 +45,9 @@
 }
 
 .icon-btn:hover {
-  background: #F1F5F9;
+  background: var(--bg-tertiary);
+  border-color: #4977d4;
+  transform: translateY(-1px) ;
 }
 
 .icon-btn.notification .badge {
@@ -68,13 +72,13 @@
   gap: 10px;
   margin-left: 8px;
   padding-left: 16px;
-  border-left: 1px solid #E2E8F0;
+  border-left: 1px solid var(--border-color);
 }
 
 .avatar {
   width: 36px;
   height: 36px;
-  background: #E2E8F0;
+  background: var(--border-color);
   color: white;
   border-radius: 50%;
   display: flex;
@@ -87,7 +91,7 @@
 .user-name {
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .logout-btn {
@@ -95,7 +99,7 @@
   border: none;
   cursor: pointer;
   font-size: 18px;
-  color: #6B7280;
+  color: var(--text-muted);
   padding: 4px;
   transition: color 0.2s;
 }

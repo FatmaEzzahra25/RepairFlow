@@ -5,7 +5,7 @@
 .loading {
   text-align: center;
   padding: 60px;
-  color: #64748B;
+  color: var(--text-muted);
   font-size: 16px;
 }
 
@@ -17,10 +17,10 @@
 }
 
 .stat-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--border-color);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -42,13 +42,13 @@
 .stat-value {
   font-size: 32px;
   font-weight: 700;
-  color: #1E293B;
+  color: #111827;
   line-height: 1;
 }
 
 .stat-label {
   font-size: 13px;
-  color: #64748B;
+  color: #4B5563;
   margin-top: 6px;
 }
 
@@ -59,23 +59,23 @@
 }
 
 .chart-card {
-  background: white;
+  background: var(--bg-primary);
   border-radius: 16px;
   padding: 24px;
-  border: 1px solid #E2E8F0;
+  border: 1px solid var(--border-color);
 }
 
 .chart-card h3 {
   font-size: 16px;
   font-weight: 600;
-  color: #1E293B;
+  color: var(--text-primary);
   margin: 0 0 20px 0;
 }
 
 .empty-chart {
   padding: 30px 0;
   text-align: center;
-  color: #94A3B8;
+  color: var(--text-faint);
   font-size: 13px;
 }
 
@@ -90,7 +90,7 @@
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: #F8FAFC;
+  background: var(--bg-tertiary);
   border-radius: 10px;
 }
 
@@ -108,13 +108,13 @@
 .status-name {
   flex: 1;
   font-size: 14px;
-  color: #374151;
+  color: var(--text-secondary);
 }
 
 .status-value {
   font-size: 14px;
   font-weight: 600;
-  color: #1E293B;
+  color: var(--text-primary);
 }
 
 .recent-list {
@@ -129,7 +129,7 @@
   justify-content: space-between;
   gap: 12px;
   padding: 12px 14px;
-  background: #F8FAFC;
+  background: var(--bg-tertiary);
   border-radius: 10px;
 }
 
@@ -143,7 +143,7 @@
 .recent-name {
   font-size: 14px;
   font-weight: 600;
-  color: #1E293B;
+  color: var(--text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -151,7 +151,7 @@
 
 .recent-cat {
   font-size: 12px;
-  color: #94A3B8;
+  color: var(--text-faint);
 }
 
 .status-badge {
@@ -193,6 +193,11 @@
   color: #1E40AF;
 }
 .status-badge.pret .status-dot { background: #3B82F6; }
+
+html.dark-mode .status-badge.recu { background: rgba(239, 68, 68, 0.18); color: #FCA5A5; }
+html.dark-mode .status-badge.en_cours { background: rgba(245, 158, 11, 0.18); color: #FCD34D; }
+html.dark-mode .status-badge.repare { background: rgba(16, 185, 129, 0.18); color: #6EE7B7; }
+html.dark-mode .status-badge.pret { background: rgba(59, 130, 246, 0.18); color: #93C5FD; }
 
 @media (max-width: 1024px) {
   .bottom-section { grid-template-columns: 1fr; }

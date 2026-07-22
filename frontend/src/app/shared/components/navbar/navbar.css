@@ -46,6 +46,8 @@
 
 .icon-btn:hover {
   background: var(--bg-tertiary);
+  border-color: #4977d4;
+  transform: translateY(-1px) ;
 }
 
 .icon-btn.notification .badge {
