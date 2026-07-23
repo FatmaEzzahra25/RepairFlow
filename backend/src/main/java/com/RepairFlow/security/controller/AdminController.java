@@ -2,6 +2,7 @@ package com.RepairFlow.security.controller;
 
 import com.RepairFlow.security.auth.AuthenticationResponse;
 import com.RepairFlow.security.auth.RegisterRequest;
+import com.RepairFlow.security.email.EmailService;
 import com.RepairFlow.security.user.*;
 import com.RepairFlow.security.user.config.JwtService;
 import com.RepairFlow.security.user.repository.CategorieProduitRepository;
@@ -27,6 +28,7 @@ public class AdminController {
     private final CategorieProduitRepository categorieProduitRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final EmailService emailService;
 
     @GetMapping("/dashboard")
     @PreAuthorize("hasRole('ADMIN')")
@@ -98,6 +100,12 @@ public class AdminController {
 
         utilisateurRepository.save(reparateur);
 
+        emailService.envoyerIdentifiantsReparateur(
+                request.getEmail(),
+                request.getPrenom(),
+                request.getMotDePasse()
+        );
+
         var jwtToken = jwtService.generateToken(reparateur);
         return ResponseEntity.ok(AuthenticationResponse.builder().token(jwtToken).build());
     }
@@ -116,6 +124,11 @@ public class AdminController {
         reparateur.setAdresse(request.getAdresse());
         if (request.getMotDePasse() != null && !request.getMotDePasse().isEmpty()) {
             reparateur.setMotDePasse(passwordEncoder.encode(request.getMotDePasse()));
+            emailService.envoyerMotDePasseModifieReparateur(
+                    reparateur.getEmail(),
+                    reparateur.getPrenom(),
+                    request.getMotDePasse()
+            );
         }
         return ResponseEntity.ok(utilisateurRepository.save(reparateur));
     }

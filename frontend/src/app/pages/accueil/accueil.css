@@ -744,4 +744,21 @@
   .step-card { max-width: none; }
   .step-arrow { justify-content: center; transform: rotate(90deg); }
   .footer-inner { grid-template-columns: 1fr; }
+  .product-pic { max-width: 460px; }
+}
+
+.product-pic {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 14px auto 0;
+  padding: 0 24px;
+  animation: fadeUp 0.7s ease 0.4s both;
+}
+
+.product-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 24px 40px rgba(37, 99, 235, 0.22));
 }

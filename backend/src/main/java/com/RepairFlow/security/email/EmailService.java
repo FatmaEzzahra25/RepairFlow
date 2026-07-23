@@ -87,4 +87,42 @@ public class EmailService {
             log.error("Échec de l'envoi de l'email à {} : {}", email, e.getMessage());
         }
     }
+
+    public void envoyerIdentifiantsReparateur(String email, String prenom, String motDePasseClair) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("RepairFlow - Votre compte réparateur a été créé");
+            message.setText(
+                    "Bonjour " + prenom + ",\n\n" +
+                            "Un compte réparateur a été créé pour vous sur RepairFlow.\n\n" +
+                            "Voici vos identifiants de connexion :\n" +
+                            "Email : " + email + "\n" +
+                            "Mot de passe : " + motDePasseClair + "\n\n" +
+                            "Nous vous recommandons de changer ce mot de passe après votre première connexion.\n\n" +
+                            "Cordialement,\nL'équipe RepairFlow"
+            );
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("Échec de l'envoi de l'email à {} : {}", email, e.getMessage());
+        }
+    }
+
+    public void envoyerMotDePasseModifieReparateur(String email, String prenom, String nouveauMotDePasse) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("RepairFlow - Votre mot de passe a été modifié");
+            message.setText(
+                    "Bonjour " + prenom + ",\n\n" +
+                            "Votre mot de passe de connexion à RepairFlow a été modifié par l'administrateur.\n\n" +
+                            "Nouveau mot de passe : " + nouveauMotDePasse + "\n\n" +
+                            "Si vous n'êtes pas à l'origine de cette demande, contactez l'administrateur.\n\n" +
+                            "Cordialement,\nL'équipe RepairFlow"
+            );
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("Échec de l'envoi de l'email à {} : {}", email, e.getMessage());
+        }
+    }
 }
