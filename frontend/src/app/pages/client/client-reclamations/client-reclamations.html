@@ -14,29 +14,37 @@
     </select>
   </div>
 
-  <div class="reclamations-list" *ngIf="!loading">
-    <div class="reclamation-card" *ngFor="let r of filteredReclamations">
-      <div class="reclamation-header">
-        <div class="reclamation-info">
-          <span class="reclamation-id">REC-{{ r.id }}</span>
-          <span class="reclamation-date">{{ r.date | date:'dd/MM/yyyy' }}</span>
-        </div>
-        <span class="status-badge" [class.ouvert]="r.statut === 'OUVERT'" [class.ferme]="r.statut === 'FERME'">
-          {{ r.statut }}
-        </span>
-      </div>
-      <div class="reclamation-product">
-        <span class="product-icon">📱</span>
-        <span class="product-name">{{ r.produit?.nom }}</span>
-      </div>
-      <div class="reclamation-desc">
-        {{ r.description }}
-      </div>
-    </div>
-    <div class="empty-state" *ngIf="filteredReclamations.length === 0">
-      <p>Vous n'avez aucune réclamation</p>
-    </div>
+  <div class="loading-state" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
+    Chargement...
   </div>
 
-  <div class="loading" *ngIf="loading">Chargement...</div>
+  <div class="table-card" *ngIf="!loading">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>DATE</th>
+        <th>PRODUIT</th>
+        <th>DESCRIPTION</th>
+        <th>STATUT</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let r of filteredReclamations">
+        <td class="id-cell">REC-{{ r.id }}</td>
+        <td>{{ r.date | date:'dd/MM/yyyy' }}</td>
+        <td class="product-name">{{ r.produit?.nom }}</td>
+        <td class="product-desc-cell">{{ r.description }}</td>
+        <td>
+          <span class="status-badge" [class.ouvert]="r.statut === 'OUVERT'" [class.ferme]="r.statut === 'FERME'">
+            {{ r.statut }}
+          </span>
+        </td>
+      </tr>
+      <tr *ngIf="filteredReclamations.length === 0">
+        <td colspan="5" class="empty-state" style="text-align: center; padding: 30px; color: #888;">Vous n'avez aucune réclamation</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

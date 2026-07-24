@@ -31,7 +31,7 @@ export class ClientProduitsComponent implements OnInit {
     'Autre'
   ];
 
-  statuts = ['RECU', 'EN_COURS', 'REPARE', 'PRET'];
+  statuts = ['RECU', 'EN_COURS', 'REPARE', 'PRET', 'LIVRE'];
 
   constructor(
     private clientService: ClientService,
@@ -68,7 +68,8 @@ export class ClientProduitsComponent implements OnInit {
       'RECU': '#10B981',
       'EN_COURS': '#F59E0B',
       'REPARE': '#10B981',
-      'PRET': '#3B82F6'
+      'PRET': '#3B82F6',
+      'LIVRE': '#8B5CF6'
     };
     return colors[statut] || '#6B7280';
   }
@@ -78,9 +79,14 @@ export class ClientProduitsComponent implements OnInit {
       'RECU': 'Reçu',
       'EN_COURS': 'En cours',
       'REPARE': 'Réparé',
-      'PRET': 'Prêt'
+      'PRET': 'Prêt',
+      'LIVRE': 'Livré'
     };
     return labels[statut] || statut;
+  }
+
+  canOuvrirReclamation(produit: any): boolean {
+    return produit?.statut === 'LIVRE';
   }
 
   isStepActive(produitStatut: string, stepIndex: number): boolean {
@@ -93,6 +99,9 @@ export class ClientProduitsComponent implements OnInit {
   }
 
   openReclamationModal(produit: any): void {
+    if (!this.canOuvrirReclamation(produit)) {
+      return;
+    }
     this.selectedProduit = produit;
     this.reclamationForm = {
       produitId: produit.id,

@@ -1,6 +1,5 @@
 .produits-page {
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 1400px;
 }
 
 .page-header {
@@ -191,6 +190,17 @@
 
 .btn-reclamation:hover {
   background: #FEE2E2;
+}
+
+.btn-reclamation:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-faint);
+  border-color: var(--border-color);
+  cursor: not-allowed;
+}
+
+.btn-reclamation:disabled:hover {
+  background: var(--bg-secondary);
 }
 
 .btn-rdv {
@@ -427,4 +437,72 @@ html.dark-mode .error-msg {
   background: rgba(239, 68, 68, 0.15);
   color: #F87171;
   border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* --- Vue tableau --- */
+.table-card {
+  background: var(--bg-primary);
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table thead {
+  background: var(--bg-tertiary);
+}
+
+.data-table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.data-table td {
+  padding: 14px 16px;
+  border-top: 1px solid var(--bg-secondary);
+  font-size: 14px;
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+
+.id-cell {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.product-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.product-desc-cell {
+  max-width: 320px;
+  color: var(--text-muted);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
 }

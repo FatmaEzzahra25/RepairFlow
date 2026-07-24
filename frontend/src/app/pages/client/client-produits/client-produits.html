@@ -6,53 +6,49 @@
     </div>
   </div>
 
-  <div class="loading" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
+  <div class="loading-state" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
     Chargement de vos produits...
   </div>
 
-  <div class="produits-list" *ngIf="!loading">
-    <div class="product-card" *ngFor="let p of produits">
-      <div class="product-header">
-        <div class="product-info">
-          <div class="product-icon">📱</div>
-          <div class="product-details">
-            <h3 class="product-name">{{ p.nom }}</h3>
-            <p class="product-date">Déposé le: {{ p.dateDepot | date:'dd/MM/yyyy' }}</p>
-            <p class="product-desc">{{ p.descriptionPanne }}</p>
-          </div>
-        </div>
-        <div class="product-status">
-          <span class="status-badge" [style.color]="getStatusColor(p.statut)">
+  <div class="table-card" *ngIf="!loading">
+    <table class="data-table">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>DATE DÉPÔT</th>
+        <th>PRODUIT</th>
+        <th>PANNE</th>
+        <th>STATUT</th>
+        <th>ACTIONS</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let p of produits">
+        <td class="id-cell">#{{ p.id }}</td>
+        <td>{{ p.dateDepot | date:'dd/MM/yyyy' }}</td>
+        <td class="product-name">{{ p.nom }}</td>
+        <td class="product-desc-cell">{{ p.descriptionPanne }}</td>
+        <td>
+          <span class="status-badge" [style.background]="getStatusColor(p.statut) + '20'" [style.color]="getStatusColor(p.statut)">
             <span class="status-dot" [style.background]="getStatusColor(p.statut)"></span>
             {{ getStatusLabel(p.statut) }}
           </span>
-        </div>
-      </div>
-
-      <div class="timeline">
-        <div class="timeline-step" *ngFor="let s of statuts; let i = index" [class.active]="isStepActive(p.statut, i)" [class.current]="isStepCurrent(p.statut, i)">
-          <div class="step-circle">
-            <span *ngIf="isStepActive(p.statut, i) && !isStepCurrent(p.statut, i)">✓</span>
-            <span *ngIf="isStepCurrent(p.statut, i)">{{ i + 1 }}</span>
-            <span *ngIf="!isStepActive(p.statut, i)">{{ i + 1 }}</span>
-          </div>
-          <div class="step-label">{{ getStatusLabel(s) }}</div>
-        </div>
-      </div>
-
-      <div class="product-actions">
-        <button class="btn-reclamation" (click)="openReclamationModal(p)">
-          <span>📝</span> Ouvrir une réclamation
-        </button>
-       <!-- <button class="btn-rdv" *ngIf="p.statut === 'PRET'">
-          <span>📅</span> Prendre rendez-vous
-        </button>-->
-      </div>
-    </div>
-
-    <div class="empty-state" *ngIf="produits.length === 0" style="text-align: center; padding: 30px; color: #888;">
-      <p>Vous n'avez aucun produit en réparation</p>
-    </div>
+        </td>
+        <td>
+          <button
+            class="btn-reclamation"
+            [disabled]="!canOuvrirReclamation(p)"
+            [title]="canOuvrirReclamation(p) ? 'Ouvrir une réclamation' : 'Disponible une fois le produit livré'"
+            (click)="openReclamationModal(p)">
+            <span>📝</span> Réclamation
+          </button>
+        </td>
+      </tr>
+      <tr *ngIf="produits.length === 0">
+        <td colspan="6" class="empty-state" style="text-align: center; padding: 30px; color: #888;">Vous n'avez aucun produit en réparation</td>
+      </tr>
+      </tbody>
+    </table>
   </div>
 
   <div class="modal-overlay" *ngIf="showReclamationModal" (click)="closeReclamationModal()">

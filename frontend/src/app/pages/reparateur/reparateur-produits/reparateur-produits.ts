@@ -31,7 +31,7 @@ export class ReparateurProduitsComponent implements OnInit {
     categorieId: null as number | null
   };
 
-  statuts = ['RECU', 'EN_COURS', 'REPARE', 'PRET'];
+  statuts = ['RECU', 'EN_COURS', 'REPARE', 'PRET', 'LIVRE'];
 
   constructor(
     private reparateurService: ReparateurService,
@@ -168,7 +168,8 @@ export class ReparateurProduitsComponent implements OnInit {
       'RECU': '#EF4444',
       'EN_COURS': '#F59E0B',
       'REPARE': '#10B981',
-      'PRET': '#3B82F6'
+      'PRET': '#3B82F6',
+      'LIVRE': '#8B5CF6'
     };
     return colors[statut] || '#6B7280';
   }
@@ -178,7 +179,8 @@ export class ReparateurProduitsComponent implements OnInit {
       'RECU': 'Reçu',
       'EN_COURS': 'En cours',
       'REPARE': 'Réparé',
-      'PRET': 'Prêt'
+      'PRET': 'Prêt',
+      'LIVRE': 'Livré'
     };
     return labels[statut] || statut;
   }
