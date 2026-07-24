@@ -1,5 +1,6 @@
 package com.RepairFlow.security.user.config;
 
+import com.RepairFlow.security.user.Utilisateur;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -19,8 +20,13 @@ import java.util.stream.Collectors;
 public class JwtService {
     private static final String SECRET_KEY ="b4c2791c46745b6fb3791e021f0cb7ee450f826f58ddcede470421dedcbba56a";
 
-    public String extractUsername(String token) {
-        return extractClaims(token, Claims::getSubject);
+    public Long extractUserId(String token) {
+        String subject = extractClaims(token, Claims::getSubject);
+        return subject != null ? Long.valueOf(subject) : null;
+    }
+
+    public String extractRole(String token) {
+        return extractClaims(token, claims -> claims.get("role", String.class));
     }
 
     public <T> T extractClaims(String token, Function<Claims, T> claimsResolver) {
@@ -41,10 +47,14 @@ public class JwtService {
                 .collect(Collectors.joining(","));
         extraClaims.put("role", role);
 
+        String subject = (userDetails instanceof Utilisateur utilisateur)
+                ? String.valueOf(utilisateur.getId())
+                : userDetails.getUsername();
+
         return Jwts
                 .builder()
                 .claims(extraClaims)
-                .subject(userDetails.getUsername())
+                .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24))
                 .signWith(getSignIntKey())
@@ -52,8 +62,11 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        final Long userId = extractUserId(token);
+        boolean sameUser = (userDetails instanceof Utilisateur utilisateur)
+                && userId != null
+                && userId.equals(utilisateur.getId());
+        return sameUser && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
