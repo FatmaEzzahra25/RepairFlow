@@ -20,6 +20,7 @@ public class Produit {
     private String descriptionPanne;
     private LocalDateTime dateDepot;
     private String observation;
+    private String photoUrl;
 
     @Enumerated(EnumType.STRING)
     private StatutReparation statut;

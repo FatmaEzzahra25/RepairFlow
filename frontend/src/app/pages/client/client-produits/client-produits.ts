@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
 import { ClientService } from '../../../core/services/client';
+import { API_BASE_URL } from '../../../core/services/api.config';
 
 @Component({
   selector: 'app-client-produits',
@@ -87,6 +88,13 @@ export class ClientProduitsComponent implements OnInit {
 
   canOuvrirReclamation(produit: any): boolean {
     return produit?.statut === 'LIVRE';
+  }
+
+  getPhotoUrl(photoUrl: string | null | undefined): string {
+    if (!photoUrl) return '';
+    if (photoUrl.startsWith('http')) return photoUrl;
+    const serverRoot = API_BASE_URL.replace(/\/api\/v1$/, '');
+    return `${serverRoot}${photoUrl}`;
   }
 
   isStepActive(produitStatut: string, stepIndex: number): boolean {

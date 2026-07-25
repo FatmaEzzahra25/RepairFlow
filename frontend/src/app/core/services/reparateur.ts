@@ -29,6 +29,12 @@ export class ReparateurService {
     return this.http.put(`${this.apiUrl}/produits/${id}/observation?observation=${observation}`, {});
   }
 
+  uploadProduitPhoto(id: number, photo: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('photo', photo);
+    return this.http.post(`${this.apiUrl}/produits/${id}/photo`, formData);
+  }
+
   getClients(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/reparateur/clients`);
   }

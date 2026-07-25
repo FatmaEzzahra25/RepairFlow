@@ -7,11 +7,13 @@ import com.RepairFlow.security.user.repository.ProduitRepository;
 import com.RepairFlow.security.user.repository.ProduitRequest;
 import com.RepairFlow.security.user.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +26,9 @@ public class ProduitController {
     private final UtilisateurRepository utilisateurRepository;
     private final CategorieProduitRepository categorieProduitRepository;
     private final EmailService emailService;
+
+    @Value("${app.upload-dir:uploads}")
+    private String uploadDir;
 
 
     @GetMapping
@@ -98,6 +103,43 @@ public class ProduitController {
 
         produit.setObservation(observation);
         return ResponseEntity.ok(produitRepository.save(produit));
+    }
+
+    @PostMapping("/{id}/photo")
+    @PreAuthorize("hasRole('REPARATEUR')")
+    public ResponseEntity<Produit> uploaderPhoto(@PathVariable Long id, @RequestParam("photo") org.springframework.web.multipart.MultipartFile photo) {
+        Produit produit = produitRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produit non trouvé"));
+
+        if (photo.isEmpty()) {
+            throw new RuntimeException("Fichier photo vide");
+        }
+
+        String contentType = photo.getContentType();
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new RuntimeException("Le fichier doit être une image");
+        }
+
+        try {
+            String dossier = uploadDir + File.separator + "produits";
+            java.nio.file.Path dossierPath = java.nio.file.Paths.get(dossier);
+            java.nio.file.Files.createDirectories(dossierPath);
+
+            String extension = "";
+            String nomOriginal = photo.getOriginalFilename();
+            if (nomOriginal != null && nomOriginal.contains(".")) {
+                extension = nomOriginal.substring(nomOriginal.lastIndexOf('.'));
+            }
+            String nomFichier = "produit_" + id + "_" + System.currentTimeMillis() + extension;
+
+            java.nio.file.Path cible = dossierPath.resolve(nomFichier);
+            photo.transferTo(cible);
+
+            produit.setPhotoUrl("/uploads/produits/" + nomFichier);
+            return ResponseEntity.ok(produitRepository.save(produit));
+        } catch (java.io.IOException e) {
+            throw new RuntimeException("Erreur lors de l'enregistrement de la photo", e);
+        }
     }
 
     @GetMapping("/mes-produits")

@@ -56,7 +56,13 @@
             <span class="user-name">{{ p.client?.prenom }} {{ p.client?.nom }}</span>
           </div>
         </td>
-        <td class="product-name">{{ p.nom }}</td>
+        <td class="product-name">
+          <div class="product-name-cell">
+            <!--<img *ngIf="p.photoUrl" [src]="getPhotoUrl(p.photoUrl)" class="thumb" alt="{{ p.nom }}">
+            <span *ngIf="!p.photoUrl" class="thumb thumb-placeholder">📦</span>-->
+            {{ p.nom }}
+          </div>
+        </td>
         <td>
           <span class="category-badge">{{ p.categorie?.libelle || '—' }}</span>
         </td>
@@ -90,9 +96,29 @@
       </div>
       <div class="modal-body">
         <div class="photo-upload">
-          <div class="upload-zone">
-            <span class="upload-icon">📷</span>
-            <p>Glisser-déposer ou cliquer pour ajouter une photo du produit</p>
+          <input
+            type="file"
+            #photoInput
+            accept="image/*"
+            style="display: none"
+            (change)="onPhotoSelected($event)">
+
+          <div
+            class="upload-zone"
+            [class.dragging]="isDraggingPhoto"
+            [class.has-preview]="photoPreviewUrl"
+            (click)="photoInput.click()"
+            (dragover)="onPhotoDragOver($event)"
+            (dragleave)="onPhotoDragLeave($event)"
+            (drop)="onPhotoDrop($event)">
+            <ng-container *ngIf="!photoPreviewUrl">
+              <span class="upload-icon">📷</span>
+              <p>Glisser-déposer ou cliquer pour ajouter une photo du produit</p>
+            </ng-container>
+            <div class="photo-preview" *ngIf="photoPreviewUrl">
+              <img [src]="photoPreviewUrl" alt="Aperçu photo produit">
+              <button type="button" class="btn-remove-photo" (click)="removeSelectedPhoto(); $event.stopPropagation()">✕ Retirer</button>
+            </div>
           </div>
         </div>
 
@@ -127,7 +153,7 @@
       <div *ngIf="errorMessage" class="error-msg">{{ errorMessage }}</div>
       <div class="modal-footer">
         <button class="btn-secondary" (click)="closeModal()">Annuler</button>
-        <button class="btn-primary" (click)="saveProduit()">Enregistrer</button>
+        <button class="btn-primary" [disabled]="uploadingPhoto" (click)="saveProduit()">{{ uploadingPhoto ? 'Envoi en cours...' : 'Enregistrer' }}</button>
       </div>
     </div>
   </div>
@@ -139,6 +165,49 @@
         <button class="modal-close" (click)="closeViewModal()">×</button>
       </div>
       <div class="modal-body">
+        <div class="form-group">
+          <label>Photo du produit</label>
+          <div class="photo-upload">
+            <input
+              type="file"
+              #viewPhotoInput
+              accept="image/*"
+              style="display: none"
+              (change)="onPhotoSelected($event)">
+
+            <div
+              class="upload-zone upload-zone-compact"
+              [class.dragging]="isDraggingPhoto"
+              [class.has-preview]="photoPreviewUrl || viewingProduit?.photoUrl"
+              (click)="viewPhotoInput.click()"
+              (dragover)="onPhotoDragOver($event)"
+              (dragleave)="onPhotoDragLeave($event)"
+              (drop)="onPhotoDrop($event)">
+              <ng-container *ngIf="!photoPreviewUrl && !viewingProduit?.photoUrl">
+                <span class="upload-icon">📷</span>
+                <p>Glisser-déposer ou cliquer pour ajouter une photo</p>
+              </ng-container>
+              <div class="photo-preview" *ngIf="photoPreviewUrl">
+                <img [src]="photoPreviewUrl" alt="Aperçu photo produit">
+                <button type="button" class="btn-remove-photo" (click)="removeSelectedPhoto(); $event.stopPropagation()">✕ Retirer</button>
+              </div>
+              <div class="photo-preview" *ngIf="!photoPreviewUrl && viewingProduit?.photoUrl">
+                <img [src]="getPhotoUrl(viewingProduit.photoUrl)" alt="Photo produit">
+                <span class="photo-hint">Cliquer pour remplacer</span>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              class="btn-secondary btn-upload-photo"
+              *ngIf="selectedPhotoFile"
+              [disabled]="uploadingPhoto"
+              (click)="uploadPhotoForViewingProduit()">
+              {{ uploadingPhoto ? 'Envoi en cours...' : ' Enregistrer la photo' }}
+            </button>
+          </div>
+        </div>
+
         <div class="form-row two-col">
           <div class="form-group">
             <label>Produit</label>

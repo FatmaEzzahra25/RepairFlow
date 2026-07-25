@@ -26,7 +26,13 @@
       <tr *ngFor="let p of produits">
         <td class="id-cell">#{{ p.id }}</td>
         <td>{{ p.dateDepot | date:'dd/MM/yyyy' }}</td>
-        <td class="product-name">{{ p.nom }}</td>
+        <td class="product-name">
+          <div class="product-name-cell">
+            <!--<img *ngIf="p.photoUrl" [src]="getPhotoUrl(p.photoUrl)" class="thumb" alt="{{ p.nom }}">
+            <span *ngIf="!p.photoUrl" class="thumb thumb-placeholder">📦</span>-->
+            {{ p.nom }}
+          </div>
+        </td>
         <td class="product-desc-cell">{{ p.descriptionPanne }}</td>
         <td>
           <span class="status-badge" [style.background]="getStatusColor(p.statut) + '20'" [style.color]="getStatusColor(p.statut)">

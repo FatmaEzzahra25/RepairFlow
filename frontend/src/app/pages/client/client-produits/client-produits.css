@@ -506,3 +506,25 @@ html.dark-mode .error-msg {
   height: 8px;
   border-radius: 50%;
 }
+
+.thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.thumb-placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  font-size: 14px;
+}
+
+.product-name-cell {
+  display: flex;
+  align-items: center;
+}
