@@ -15,10 +15,13 @@
     <button class="icon-btn">
       <span>⚙️</span>
     </button>-->
-    <div class="user-menu">
-      <div class="avatar">👤</div>
+    <div class="user-menu" (click)="goToProfile()" style="cursor: pointer;">
+      <div class="avatar">
+        <img *ngIf="currentUser?.photoUrl" [src]="getPhotoUrl(currentUser.photoUrl)" alt="Profil">
+        <span *ngIf="!currentUser?.photoUrl">👤</span>
+      </div>
       <span class="user-name">{{ userName }}</span>
-      <button class="logout-btn" (click)="logout()">→</button>
+      <button class="logout-btn" (click)="logout(); $event.stopPropagation()">→</button>
     </div>
   </div>
 </header>

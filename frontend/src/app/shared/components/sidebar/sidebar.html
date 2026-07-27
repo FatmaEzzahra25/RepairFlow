@@ -8,6 +8,15 @@
     </div>
   </div>
 
+  <div class="sidebar-profile" *ngIf="!isCollapsed" (click)="goToProfile()">
+    <div class="sidebar-avatar">
+      <img *ngIf="currentUser?.photoUrl" [src]="getPhotoUrl(currentUser.photoUrl)" alt="Profil">
+      <span *ngIf="!currentUser?.photoUrl">👤</span>
+    </div>
+    <div class="sidebar-profile-name">{{ currentUser?.prenom }} {{ currentUser?.nom }}</div>
+    <div class="sidebar-profile-role">{{ roleLabel }}</div>
+  </div>
+
   <nav class="sidebar-nav">
     <a
       *ngFor="let item of menuItems"
@@ -21,14 +30,10 @@
   </nav>
 
   <div class="sidebar-bottom">
-    <!--<a
-      *ngFor="let item of bottomItems"
-      class="nav-item"
-      [routerLink]="item.route"
-    >
-      <span class="nav-icon">{{ item.icon }}</span>
-      <span class="nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
-    </a>-->
+    <a class="nav-item" [routerLink]="profileRoute" [class.active]="router.url.includes(profileRoute)">
+      <span class="nav-icon">👤</span>
+      <span class="nav-label" *ngIf="!isCollapsed">Mon Profil</span>
+    </a>
     <a class="nav-item logout" (click)="logout()">
       <span class="nav-icon">🚪</span>
       <span class="nav-label" *ngIf="!isCollapsed">Déconnexion</span>

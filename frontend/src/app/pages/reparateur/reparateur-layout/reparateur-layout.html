@@ -1,7 +1,7 @@
 <div class="reparateur-layout">
-  <app-reparateur-sidebar (collapsedChange)="onSidebarCollapsed($event)"></app-reparateur-sidebar>
+  <app-sidebar basePath="reparateur" [menuItems]="menuItems" (collapsedChange)="onSidebarCollapsed($event)"></app-sidebar>
   <div class="main-content" [class.collapsed]="isSidebarCollapsed">
-    <app-reparateur-navbar></app-reparateur-navbar>
+    <app-navbar basePath="reparateur" [pageTitles]="pageTitles" [pageSubtitles]="pageSubtitles" defaultSubtitle="Gérez vos tâches et optimisez vos réparations."></app-navbar>
     <div class="page-content">
       <router-outlet></router-outlet>
     </div>

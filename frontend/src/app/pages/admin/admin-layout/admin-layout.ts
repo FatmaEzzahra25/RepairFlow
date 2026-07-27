@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { SidebarComponent} from '../../../shared/components/sidebar/sidebar';
+import { SidebarComponent, SidebarMenuItem } from '../../../shared/components/sidebar/sidebar';
 import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 
 @Component({
@@ -13,6 +13,21 @@ import { NavbarComponent } from '../../../shared/components/navbar/navbar';
 })
 export class AdminLayoutComponent {
   isSidebarCollapsed = false;
+
+  menuItems: SidebarMenuItem[] = [
+    { icon: '📊', label: 'Dashboard', route: '/admin/dashboard' },
+    { icon: '🔧', label: 'Réparateurs', route: '/admin/reparateurs' },
+    { icon: '📁', label: 'Catégories', route: '/admin/categories' },
+    { icon: '📦', label: 'Produits', route: '/admin/produits' },
+  ];
+
+  pageTitles: { [key: string]: string } = {
+    '/admin/dashboard': 'Tableau de Bord',
+  };
+
+  pageSubtitles: { [key: string]: string } = {
+    '/admin/dashboard': "Vue d'ensemble de l'activité RepairFlow",
+  };
 
   onSidebarCollapsed(collapsed: boolean): void {
     this.isSidebarCollapsed = collapsed;

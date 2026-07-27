@@ -144,8 +144,6 @@ export class ReparateurProduitsComponent implements OnInit {
       this.photoPreviewUrl = reader.result as string;
       this.cdr.detectChanges();
 
-      // En mode "édition" (modal détails d'un produit existant), on envoie
-      // la photo tout de suite : pas besoin d'un clic supplémentaire.
       if (this.viewingProduit) {
         this.uploadPhotoForViewingProduit();
       }

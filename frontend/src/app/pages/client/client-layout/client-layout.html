@@ -1,7 +1,7 @@
 <div class="client-layout">
-  <app-client-sidebar (collapsedChange)="onSidebarCollapsed($event)"></app-client-sidebar>
+  <app-sidebar basePath="client" [menuItems]="menuItems" (collapsedChange)="onSidebarCollapsed($event)"></app-sidebar>
   <div class="main-content" [class.collapsed]="isSidebarCollapsed">
-    <app-client-navbar></app-client-navbar>
+    <app-navbar basePath="client" [pageTitles]="pageTitles" [pageSubtitles]="pageSubtitles" defaultSubtitle="Votre espace pour suivre l'état de vos appareils."></app-navbar>
     <div class="page-content">
       <router-outlet></router-outlet>
     </div>

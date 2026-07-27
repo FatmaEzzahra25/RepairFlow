@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
 import { ThemeService } from '../../../core/services/theme';
+import { ProfilService } from '../../../core/services/profil';
 
 @Component({
   selector: 'app-navbar',
@@ -11,38 +12,63 @@ import { ThemeService } from '../../../core/services/theme';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class NavbarComponent {
-  userName = 'Admin';
-  notifications = 3;
+export class NavbarComponent implements OnInit {
+  // Prefixe de route selon l'espace (admin | reparateur | client).
+  @Input() basePath = 'admin';
 
-  pageTitles: { [key: string]: string } = {
+  @Input() pageTitles: { [key: string]: string } = {
     '/admin/dashboard': 'Tableau de Bord',
-    //'/admin/reparateurs': 'Gestion des Réparateurs',
-    //'/admin/categories': 'Catégories de Produits',
-    //'/admin/produits': 'Gestion de Produits',
-    //'/admin/statistiques': 'Statistiques',
   };
 
-  pageSubtitles: { [key: string]: string } = {
+  @Input() pageSubtitles: { [key: string]: string } = {
     '/admin/dashboard': "Vue d'ensemble de l'activité RepairFlow",
-    //'/admin/reparateurs': 'Gérez les techniciens de votre atelier',
-    //'/admin/categories': 'Gérez les catégories d équipements',
-    //'/admin/produits': 'Gérez la liste de produits',
-    //'/admin/statistiques': 'Analysez les performances de votre atelier',
+  };
+
+  @Input() defaultSubtitle = "Pilotez l'activité et supervisez le flux de travail.";
+
+  notifications = 3;
+  currentUser: any = null;
+
+  roleLabels: { [key: string]: string } = {
+    ADMIN: 'Admin',
+    REPARATEUR: 'Réparateur',
+    CLIENT: 'Client'
   };
 
   constructor(
     private auth: AuthService,
     public router: Router,
-    public theme: ThemeService
+    public theme: ThemeService,
+    private profilService: ProfilService
   ) {}
+
+  ngOnInit(): void {
+    this.profilService.currentUser$.subscribe(user => this.currentUser = user);
+    this.profilService.loadMe();
+  }
+
+  get userName(): string {
+    return this.roleLabels[this.currentUser?.role] || 'Utilisateur';
+  }
+
+  get profileRoute(): string {
+    return `/${this.basePath}/profil`;
+  }
+
+  getPhotoUrl(photoUrl: string | null | undefined): string {
+    return this.profilService.getPhotoUrl(photoUrl);
+  }
+
+  goToProfile(): void {
+    this.router.navigate([this.profileRoute]);
+  }
 
   get pageTitle(): string {
     return this.pageTitles[this.router.url] || 'RepairFlow';
   }
 
   get pageSubtitle(): string {
-    return this.pageSubtitles[this.router.url] || 'Pilotez l\'activité et supervisez le flux de travail.';
+    return this.pageSubtitles[this.router.url] || this.defaultSubtitle;
   }
 
   logout(): void {

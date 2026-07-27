@@ -35,7 +35,7 @@ public class AdminController {
     public ResponseEntity<Map<String, Object>> getDashboard() {
         List<Utilisateur> utilisateurs = utilisateurRepository.findAll();
         List<Produit> produits = produitRepository.findAll();
-
+  
         long totalUtilisateurs = utilisateurs.size();
         long totalReparateurs = utilisateurs.stream().filter(u -> u.getRole() == Role.REPARATEUR).count();
         long totalClients = utilisateurs.stream().filter(u -> u.getRole() == Role.CLIENT).count();

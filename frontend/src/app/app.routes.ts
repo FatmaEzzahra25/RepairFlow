@@ -6,6 +6,7 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard';
 import { ReparateursComponent } from './pages/admin/reparateurs/reparateurs';
 import { CategoriesComponent } from './pages/admin/categories/categories';
 import { AdminProduitsComponent } from './pages/admin/produits/produits';
+import { ProfilePageComponent } from './shared/components/profile-page/profile-page';
 import { reparateurRoutes } from './pages/reparateur/reparateur.routes';
 import { clientRoutes } from './pages/client/client.routes';
 import { authGuard } from './core/guards/auth-guard';
@@ -24,6 +25,7 @@ export const routes: Routes = [
       { path: 'reparateurs', component: ReparateursComponent },
       { path: 'categories', component: CategoriesComponent },
       { path: 'produits', component: AdminProduitsComponent },
+      { path: 'profil', component: ProfilePageComponent },
     ]
   },
   {

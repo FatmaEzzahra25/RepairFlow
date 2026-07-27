@@ -29,6 +29,7 @@ public class Utilisateur implements UserDetails {
     private String motDePasse;
     private String telephone;
     private String adresse;
+    private String photoUrl;
 
     @Enumerated(EnumType.STRING)
     private Role role;

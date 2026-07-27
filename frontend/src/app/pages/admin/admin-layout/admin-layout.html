@@ -1,7 +1,7 @@
 <div class="admin-layout">
-  <app-sidebar (collapsedChange)="onSidebarCollapsed($event)"></app-sidebar>
+  <app-sidebar basePath="admin" [menuItems]="menuItems" (collapsedChange)="onSidebarCollapsed($event)"></app-sidebar>
   <div class="main-content" [class.collapsed]="isSidebarCollapsed">
-    <app-navbar></app-navbar>
+    <app-navbar basePath="admin" [pageTitles]="pageTitles" [pageSubtitles]="pageSubtitles" defaultSubtitle="Pilotez l'activité et supervisez le flux de travail."></app-navbar>
     <div class="page-content">
       <router-outlet></router-outlet>
     </div>

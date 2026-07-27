@@ -5,6 +5,7 @@ import { ReparateurProduitsComponent } from './reparateur-produits/reparateur-pr
 import { ReparateurClientsComponent } from './reparateur-clients/reparateur-clients';
 import { ReparateurCategoriesComponent } from './reparateur-categories/reparateur-categories';
 import { ReparateurReclamationsComponent } from './reparateur-reclamations/reparateur-reclamations';
+import { ProfilePageComponent } from '../../shared/components/profile-page/profile-page';
 
 export const reparateurRoutes: Routes = [
   {
@@ -17,6 +18,7 @@ export const reparateurRoutes: Routes = [
       { path: 'clients', component: ReparateurClientsComponent },
       { path: 'categories', component: ReparateurCategoriesComponent },
       { path: 'reclamations', component: ReparateurReclamationsComponent },
+      { path: 'profil', component: ProfilePageComponent },
     ]
   }
 ];
