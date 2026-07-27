@@ -1,4 +1,4 @@
-package com.RepairFlow.security.user.repository;
+package com.RepairFlow.security.repository;
 
 import lombok.Data;
 

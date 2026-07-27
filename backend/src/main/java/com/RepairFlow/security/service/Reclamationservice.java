@@ -1,14 +1,14 @@
 package com.RepairFlow.security.service;
 
 import com.RepairFlow.security.email.EmailService;
-import com.RepairFlow.security.user.Produit;
-import com.RepairFlow.security.user.Reclamation;
-import com.RepairFlow.security.user.Role;
-import com.RepairFlow.security.user.Utilisateur;
-import com.RepairFlow.security.user.repository.ProduitRepository;
-import com.RepairFlow.security.user.repository.ReclamationRepository;
-import com.RepairFlow.security.user.repository.ReclamationRequest;
-import com.RepairFlow.security.user.repository.UtilisateurRepository;
+import com.RepairFlow.security.model.Produit;
+import com.RepairFlow.security.model.Reclamation;
+import com.RepairFlow.security.model.Role;
+import com.RepairFlow.security.model.Utilisateur;
+import com.RepairFlow.security.repository.ProduitRepository;
+import com.RepairFlow.security.repository.ReclamationRepository;
+import com.RepairFlow.security.repository.ReclamationRequest;
+import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

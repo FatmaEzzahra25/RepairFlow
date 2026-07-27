@@ -1,6 +1,6 @@
-package com.RepairFlow.security.user.config;
+package com.RepairFlow.security.config;
 
-import com.RepairFlow.security.user.Utilisateur;
+import com.RepairFlow.security.model.Utilisateur;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -47,6 +47,7 @@ public class JwtService {
                 .collect(Collectors.joining(","));
         extraClaims.put("role", role);
 
+        // Le subject devient l'ID (chiffre/signe dans le token), plus l'email.
         String subject = (userDetails instanceof Utilisateur utilisateur)
                 ? String.valueOf(utilisateur.getId())
                 : userDetails.getUsername();

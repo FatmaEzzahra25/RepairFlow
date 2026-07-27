@@ -1,6 +1,6 @@
-package com.RepairFlow.security.user.repository;
+package com.RepairFlow.security.repository;
 
-import com.RepairFlow.security.user.CategorieProduit;
+import com.RepairFlow.security.model.CategorieProduit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

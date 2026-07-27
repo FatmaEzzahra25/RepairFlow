@@ -1,7 +1,7 @@
-package com.RepairFlow.security.user.config;
+package com.RepairFlow.security.config;
 
-import com.RepairFlow.security.user.Utilisateur;
-import com.RepairFlow.security.user.repository.UtilisateurRepository;
+import com.RepairFlow.security.model.Utilisateur;
+import com.RepairFlow.security.repository.UtilisateurRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

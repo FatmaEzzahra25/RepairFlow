@@ -1,6 +1,6 @@
-package com.RepairFlow.security.user.config;
+package com.RepairFlow.security.config;
 
-import com.RepairFlow.security.user.repository.UtilisateurRepository;
+import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

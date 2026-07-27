@@ -1,4 +1,4 @@
-package com.RepairFlow.security.user;
+package com.RepairFlow.security.model;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,7 +1,7 @@
 package com.RepairFlow.security.service;
 
-import com.RepairFlow.security.user.Utilisateur;
-import com.RepairFlow.security.user.repository.UtilisateurRepository;
+import com.RepairFlow.security.model.Utilisateur;
+import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;

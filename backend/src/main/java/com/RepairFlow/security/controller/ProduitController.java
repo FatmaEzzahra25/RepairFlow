@@ -1,9 +1,9 @@
 package com.RepairFlow.security.controller;
 
 import com.RepairFlow.security.service.ProduitService;
-import com.RepairFlow.security.user.Produit;
-import com.RepairFlow.security.user.StatutReparation;
-import com.RepairFlow.security.user.repository.ProduitRequest;
+import com.RepairFlow.security.model.Produit;
+import com.RepairFlow.security.model.StatutReparation;
+import com.RepairFlow.security.repository.ProduitRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/produits")

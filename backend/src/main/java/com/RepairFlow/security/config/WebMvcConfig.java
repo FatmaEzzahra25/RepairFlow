@@ -1,4 +1,4 @@
-package com.RepairFlow.security.user.config;
+package com.RepairFlow.security.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

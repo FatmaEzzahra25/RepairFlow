@@ -1,8 +1,8 @@
-package com.RepairFlow.security.user.repository;
+package com.RepairFlow.security.repository;
 
-import com.RepairFlow.security.user.Produit;
-import com.RepairFlow.security.user.Reclamation;
-import com.RepairFlow.security.user.Utilisateur;
+import com.RepairFlow.security.model.Produit;
+import com.RepairFlow.security.model.Reclamation;
+import com.RepairFlow.security.model.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

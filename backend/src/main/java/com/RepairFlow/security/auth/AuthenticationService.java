@@ -1,9 +1,9 @@
 package com.RepairFlow.security.auth;
 
-import com.RepairFlow.security.user.Role;
-import com.RepairFlow.security.user.Utilisateur;
-import com.RepairFlow.security.user.repository.UtilisateurRepository;
-import com.RepairFlow.security.user.config.JwtService;
+import com.RepairFlow.security.model.Role;
+import com.RepairFlow.security.model.Utilisateur;
+import com.RepairFlow.security.repository.UtilisateurRepository;
+import com.RepairFlow.security.config.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

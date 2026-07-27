@@ -3,9 +3,9 @@ package com.RepairFlow.security.controller;
 import com.RepairFlow.security.auth.AuthenticationResponse;
 import com.RepairFlow.security.auth.RegisterRequest;
 import com.RepairFlow.security.service.Adminservice;
-import com.RepairFlow.security.user.CategorieProduit;
-import com.RepairFlow.security.user.Produit;
-import com.RepairFlow.security.user.Utilisateur;
+import com.RepairFlow.security.model.CategorieProduit;
+import com.RepairFlow.security.model.Produit;
+import com.RepairFlow.security.model.Utilisateur;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+
 
 @RestController
 @RequestMapping("/api/v1/admin")

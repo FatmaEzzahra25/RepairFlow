@@ -1,8 +1,8 @@
 package com.RepairFlow.security.controller;
 
 import com.RepairFlow.security.service.Reclamationservice;
-import com.RepairFlow.security.user.Reclamation;
-import com.RepairFlow.security.user.repository.ReclamationRequest;
+import com.RepairFlow.security.model.Reclamation;
+import com.RepairFlow.security.repository.ReclamationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

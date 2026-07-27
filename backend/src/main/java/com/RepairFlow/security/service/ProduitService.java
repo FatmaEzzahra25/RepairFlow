@@ -1,11 +1,11 @@
 package com.RepairFlow.security.service;
 
 import com.RepairFlow.security.email.EmailService;
-import com.RepairFlow.security.user.*;
-import com.RepairFlow.security.user.repository.CategorieProduitRepository;
-import com.RepairFlow.security.user.repository.ProduitRepository;
-import com.RepairFlow.security.user.repository.ProduitRequest;
-import com.RepairFlow.security.user.repository.UtilisateurRepository;
+import com.RepairFlow.security.model.*;
+import com.RepairFlow.security.repository.CategorieProduitRepository;
+import com.RepairFlow.security.repository.ProduitRepository;
+import com.RepairFlow.security.repository.ProduitRequest;
+import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
