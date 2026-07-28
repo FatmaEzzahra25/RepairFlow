@@ -137,7 +137,6 @@ html.dark-mode .status-badge.ferme {
   color: var(--text-muted);
 }
 
-/* --- Vue tableau --- */
 .table-card {
   background: var(--bg-primary);
   border-radius: 16px;

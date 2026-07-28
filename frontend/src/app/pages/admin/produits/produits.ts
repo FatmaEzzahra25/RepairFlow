@@ -1,6 +1,8 @@
-import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { AdminService } from '../../../core/services/admin';
 
 @Component({
@@ -10,7 +12,7 @@ import { AdminService } from '../../../core/services/admin';
   templateUrl: './produits.html',
   styleUrls: ['./produits.css']
 })
-export class AdminProduitsComponent implements OnInit {
+export class AdminProduitsComponent implements OnInit, OnDestroy {
   produits: any[] = [];
   reparateurs: { id: number; nom: string }[] = [];
   loading = true;
@@ -26,6 +28,8 @@ export class AdminProduitsComponent implements OnInit {
     PRET: 'Prêt'
   };
 
+  private searchChanged = new Subject<void>();
+
   constructor(
     private adminService: AdminService,
     private cdr: ChangeDetectorRef,
@@ -33,15 +37,28 @@ export class AdminProduitsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchChanged.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.loadProduits());
+
+    this.loadReparateurs();
     this.loadProduits();
+  }
+
+  ngOnDestroy(): void {
+    this.searchChanged.complete();
   }
 
   loadProduits(): void {
     this.loading = true;
-    this.adminService.getProduits().subscribe({
+    this.adminService.getProduits({
+      reparateurId: this.selectedReparateurId,
+      statut: this.statutFilter,
+      q: this.searchTerm
+    }).subscribe({
       next: (data) => {
         this.produits = data || [];
-        this.buildReparateursList();
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -53,39 +70,32 @@ export class AdminProduitsComponent implements OnInit {
     });
   }
 
-  private buildReparateursList(): void {
-    const map = new Map<number, string>();
-    for (const p of this.produits) {
-      if (p.reparateur && p.reparateur.id) {
-        const nomComplet = `${p.reparateur.prenom || ''} ${p.reparateur.nom || ''}`.trim() || p.reparateur.email;
-        map.set(p.reparateur.id, nomComplet);
-      }
-    }
-    this.reparateurs = Array.from(map.entries()).map(([id, nom]) => ({ id, nom }));
+  private loadReparateurs(): void {
+    this.adminService.getReparateurs().subscribe({
+      next: (data) => {
+        this.reparateurs = (data || []).map((r: any) => ({
+          id: r.id,
+          nom: `${r.prenom || ''} ${r.nom || ''}`.trim() || r.email
+        }));
+        this.cdr.detectChanges();
+      },
+      error: (err: any) => this.logError('Erreur chargement réparateurs:', err)
+    });
   }
 
-  get filteredProduits(): any[] {
-    return this.produits.filter(p => {
-      const matchReparateur =
-        this.selectedReparateurId === 'TOUS' ||
-        (p.reparateur && String(p.reparateur.id) === this.selectedReparateurId);
+  onFilterChange(): void {
+    this.loadProduits();
+  }
 
-      const matchStatut = this.statutFilter === 'TOUS' || p.statut === this.statutFilter;
-
-      const term = this.searchTerm.trim().toLowerCase();
-      const matchSearch =
-        !term ||
-        (p.nom || '').toLowerCase().includes(term) ||
-        (p.client && `${p.client.prenom || ''} ${p.client.nom || ''}`.toLowerCase().includes(term));
-
-      return matchReparateur && matchStatut && matchSearch;
-    });
+  onSearchChange(): void {
+    this.searchChanged.next();
   }
 
   resetFilters(): void {
     this.selectedReparateurId = 'TOUS';
     this.statutFilter = 'TOUS';
     this.searchTerm = '';
+    this.loadProduits();
   }
 
   clientNom(p: any): string {

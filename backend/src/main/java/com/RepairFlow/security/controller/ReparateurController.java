@@ -1,9 +1,9 @@
 package com.RepairFlow.security.controller;
 
-import com.RepairFlow.security.service.Reparateurcontroller;
 import com.RepairFlow.security.model.Reclamation;
 import com.RepairFlow.security.model.Utilisateur;
 import com.RepairFlow.security.repository.RegisterRequestClient;
+import com.RepairFlow.security.service.Reparateurservice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 @RequestMapping("/api/v1/reparateur")
 @RequiredArgsConstructor
 public class ReparateurController {
 
-    private final Reparateurcontroller reparateurService;
+    private final Reparateurservice reparateurService;
 
     private String emailUtilisateurConnecte() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
@@ -32,8 +33,8 @@ public class ReparateurController {
 
     @GetMapping("/clients")
     @PreAuthorize("hasRole('REPARATEUR')")
-    public ResponseEntity<List<Utilisateur>> listerClients() {
-        return ResponseEntity.ok(reparateurService.listerClients(emailUtilisateurConnecte()));
+    public ResponseEntity<List<Utilisateur>> listerClients(@RequestParam(required = false) String q) {
+        return ResponseEntity.ok(reparateurService.listerClients(emailUtilisateurConnecte(), q));
     }
 
     @PutMapping("/clients/{id}")
@@ -51,8 +52,10 @@ public class ReparateurController {
 
     @GetMapping("/reclamations")
     @PreAuthorize("hasRole('REPARATEUR')")
-    public ResponseEntity<List<Reclamation>> listerReclamations() {
-        return ResponseEntity.ok(reparateurService.listerReclamations(emailUtilisateurConnecte()));
+    public ResponseEntity<List<Reclamation>> listerReclamations(
+            @RequestParam(required = false) String statut,
+            @RequestParam(required = false) String q) {
+        return ResponseEntity.ok(reparateurService.listerReclamations(emailUtilisateurConnecte(), statut, q));
     }
 
     @PutMapping("/reclamations/{id}/cloturer")

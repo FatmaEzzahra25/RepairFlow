@@ -14,6 +14,17 @@ import java.util.List;
 public interface ReclamationRepository extends JpaRepository<Reclamation, Long> {
     List<Reclamation> findByProduit(Produit produit);
 
-    @Query("SELECT r FROM Reclamation r WHERE r.produit.client = :client")
-    List<Reclamation> findByProduitClient(@Param("client") Utilisateur client);
+    @Query("SELECT r FROM Reclamation r WHERE r.produit.client = :client " +
+            "AND (:statut IS NULL OR r.statut = :statut)")
+    List<Reclamation> findByProduitClientFiltered(@Param("client") Utilisateur client,
+                                                  @Param("statut") String statut);
+
+    @Query("SELECT r FROM Reclamation r WHERE r.produit.reparateur = :reparateur " +
+            "AND (:statut IS NULL OR r.statut = :statut) " +
+            "AND (:q IS NULL OR LOWER(r.produit.nom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%')) " +
+            "     OR LOWER(r.produit.client.nom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%')) " +
+            "     OR LOWER(r.produit.client.prenom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%')))")
+    List<Reclamation> findByReparateurFiltered(@Param("reparateur") Utilisateur reparateur,
+                                               @Param("statut") String statut,
+                                               @Param("q") String q);
 }

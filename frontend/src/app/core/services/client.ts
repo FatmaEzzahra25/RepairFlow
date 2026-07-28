@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from './api.config';
 
@@ -12,8 +12,10 @@ export class ClientService {
     return this.http.get<any[]>(`${this.apiUrl}/produits/mes-produits`);
   }
 
-  getMesReclamations(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reclamations/mes-reclamations`);
+  getMesReclamations(statut?: string | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (statut && statut !== 'TOUS') params = params.set('statut', statut);
+    return this.http.get<any[]>(`${this.apiUrl}/reclamations/mes-reclamations`, { params });
   }
 
   createReclamation(data: any): Observable<any> {

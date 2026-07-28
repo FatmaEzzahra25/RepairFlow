@@ -30,7 +30,7 @@ public class ReclamationController {
 
     @GetMapping("/mes-reclamations")
     @PreAuthorize("hasRole('CLIENT')")
-    public ResponseEntity<List<Reclamation>> mesReclamations() {
-        return ResponseEntity.ok(reclamationService.getReclamationsDuClient(emailUtilisateurConnecte()));
+    public ResponseEntity<List<Reclamation>> mesReclamations(@RequestParam(required = false) String statut) {
+        return ResponseEntity.ok(reclamationService.getReclamationsDuClient(emailUtilisateurConnecte(), statut));
     }
 }

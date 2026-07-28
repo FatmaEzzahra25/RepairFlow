@@ -13,7 +13,7 @@ import { ProfilService } from '../../../core/services/profil';
   styleUrls: ['./navbar.css']
 })
 export class NavbarComponent implements OnInit {
-  // Prefixe de route selon l'espace (admin | reparateur | client).
+
   @Input() basePath = 'admin';
 
   @Input() pageTitles: { [key: string]: string } = {

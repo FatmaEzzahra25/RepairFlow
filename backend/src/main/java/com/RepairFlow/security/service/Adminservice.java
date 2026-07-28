@@ -1,9 +1,9 @@
 package com.RepairFlow.security.service;
 
 import com.RepairFlow.security.auth.RegisterRequest;
+import com.RepairFlow.security.config.JwtService;
 import com.RepairFlow.security.email.EmailService;
 import com.RepairFlow.security.model.*;
-import com.RepairFlow.security.config.JwtService;
 import com.RepairFlow.security.repository.CategorieProduitRepository;
 import com.RepairFlow.security.repository.ProduitRepository;
 import com.RepairFlow.security.repository.UtilisateurRepository;
@@ -154,8 +154,27 @@ public class Adminservice {
         categorieProduitRepository.deleteById(id);
     }
 
-    public List<Produit> listerTousLesProduits() {
-        return produitRepository.findAll();
+    public List<Produit> listerTousLesProduits(String reparateurId, String statut, String q) {
+        Long reparateurIdFiltre = null;
+        if (reparateurId != null && !reparateurId.trim().isEmpty() && !"TOUS".equalsIgnoreCase(reparateurId.trim())) {
+            try {
+                reparateurIdFiltre = Long.valueOf(reparateurId.trim());
+            } catch (NumberFormatException ignored) {
+                // valeur inconnue -> pas de filtre plutot qu'une erreur 400
+            }
+        }
+
+        StatutReparation statutFiltre = null;
+        if (statut != null && !statut.trim().isEmpty() && !"TOUS".equalsIgnoreCase(statut.trim())) {
+            try {
+                statutFiltre = StatutReparation.valueOf(statut.trim());
+            } catch (IllegalArgumentException ignored) {
+                // valeur inconnue -> pas de filtre
+            }
+        }
+
+        String recherche = (q == null || q.trim().isEmpty()) ? null : q.trim();
+        return produitRepository.findAllFiltered(reparateurIdFiltre, statutFiltre, recherche);
     }
 
     public Produit getProduit(Long id) {

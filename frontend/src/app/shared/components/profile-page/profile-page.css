@@ -1,5 +1,5 @@
 .profile-page {
-  max-width: 1000px;
+  max-width: 1300px;
 }
 
 .page-header {
@@ -24,6 +24,19 @@
   grid-template-columns: 280px 1fr;
   gap: 24px;
   align-items: start;
+}
+
+.form-cards-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .form-cards-row {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 800px) {

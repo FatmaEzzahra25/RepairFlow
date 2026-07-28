@@ -18,7 +18,6 @@ export class ReparateurLayoutComponent {
     { icon: '📊', label: 'Dashboard', route: '/reparateur/dashboard' },
     { icon: '📦', label: 'Produits', route: '/reparateur/produits' },
     { icon: '👤', label: 'Clients', route: '/reparateur/clients' },
-    //{ icon: '📁', label: 'Catégories', route: '/reparateur/categories' },
     { icon: '📝', label: 'Réclamations', route: '/reparateur/reclamations' },
   ];
 

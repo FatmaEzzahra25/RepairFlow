@@ -35,4 +35,15 @@ public class UtilisateurController {
     public ResponseEntity<Utilisateur> uploaderPhoto(@RequestParam("photo") MultipartFile photo) {
         return ResponseEntity.ok(utilisateurService.uploaderPhotoProfil(photo));
     }
+
+    @PutMapping("/me/password")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, String>> changerMotDePasse(@RequestBody Map<String, String> body) {
+        try {
+            utilisateurService.changerMotDePasse(body.get("ancienMotDePasse"), body.get("nouveauMotDePasse"));
+            return ResponseEntity.ok(Map.of("message", "Mot de passe mis à jour avec succès"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
 }

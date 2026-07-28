@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class Reparateurcontroller {
+public class Reparateurservice {
 
     private final UtilisateurRepository utilisateurRepository;
     private final ProduitRepository produitRepository;
@@ -49,9 +49,23 @@ public class Reparateurcontroller {
         return saved;
     }
 
-    public List<Utilisateur> listerClients(String emailReparateur) {
+    public List<Utilisateur> listerClients(String emailReparateur, String q) {
         Utilisateur reparateur = getReparateurParEmail(emailReparateur);
-        return getClientsDuReparateur(reparateur);
+        List<Utilisateur> clients = getClientsDuReparateur(reparateur);
+
+        if (q == null || q.trim().isEmpty()) {
+            return clients;
+        }
+
+        String recherche = q.trim().toLowerCase();
+        return clients.stream()
+                .filter(c ->
+                        (c.getPrenom() != null && c.getPrenom().toLowerCase().contains(recherche))
+                                || (c.getNom() != null && c.getNom().toLowerCase().contains(recherche))
+                                || (c.getEmail() != null && c.getEmail().toLowerCase().contains(recherche))
+                                || (c.getTelephone() != null && c.getTelephone().contains(recherche))
+                )
+                .toList();
     }
 
     public Utilisateur modifierClient(Long id, RegisterRequestClient request, String emailReparateur) {
@@ -103,13 +117,11 @@ public class Reparateurcontroller {
         utilisateurRepository.deleteById(id);
     }
 
-    public List<Reclamation> listerReclamations(String emailReparateur) {
+    public List<Reclamation> listerReclamations(String emailReparateur, String statut, String q) {
         Utilisateur reparateur = getReparateurParEmail(emailReparateur);
-        return reclamationRepository.findAll().stream()
-                .filter(r -> r.getProduit() != null
-                        && r.getProduit().getReparateur() != null
-                        && r.getProduit().getReparateur().getId().equals(reparateur.getId()))
-                .toList();
+        String recherche = (q == null || q.trim().isEmpty()) ? null : q.trim();
+        String statutFiltre = (statut == null || statut.trim().isEmpty() || "TOUS".equalsIgnoreCase(statut)) ? null : statut.trim();
+        return reclamationRepository.findByReparateurFiltered(reparateur, statutFiltre, recherche);
     }
 
     public Reclamation cloturerReclamation(Long id, String emailReparateur) {
@@ -142,12 +154,7 @@ public class Reparateurcontroller {
         List<Produit> produits = produitRepository.findByReparateur(reparateur);
         List<Utilisateur> clients = getClientsDuReparateur(reparateur);
 
-        List<Reclamation> reclamationsOuvertes = reclamationRepository.findAll().stream()
-                .filter(r -> "OUVERT".equals(r.getStatut()))
-                .filter(r -> r.getProduit() != null
-                        && r.getProduit().getReparateur() != null
-                        && r.getProduit().getReparateur().getId().equals(reparateur.getId()))
-                .toList();
+        List<Reclamation> reclamationsOuvertes = reclamationRepository.findByReparateurFiltered(reparateur, "OUVERT", null);
 
         Map<String, Object> stats = new HashMap<>();
         stats.put("totalProduits", produits.size());

@@ -7,11 +7,11 @@
   </div>
 
   <div class="filters-bar">
-    <select class="filter-select" [(ngModel)]="selectedReparateurId">
+    <select class="filter-select" [(ngModel)]="selectedReparateurId" (ngModelChange)="onFilterChange()">
       <option value="TOUS">Tous les réparateurs</option>
       <option *ngFor="let r of reparateurs" [value]="r.id">{{ r.nom }}</option>
     </select>
-    <select class="filter-select" [(ngModel)]="statutFilter">
+    <select class="filter-select" [(ngModel)]="statutFilter" (ngModelChange)="onFilterChange()">
       <option value="TOUS">Tous les statuts</option>
       <option value="RECU">Reçu</option>
       <option value="EN_COURS">En cours</option>
@@ -20,7 +20,7 @@
     </select>
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un produit, client...">
+      <input type="text" [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" placeholder="Rechercher un produit, client...">
     </div>
     <button class="btn-reset" (click)="resetFilters()">↻ Réinitialiser</button>
   </div>
@@ -43,7 +43,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let p of filteredProduits; let i = index">
+      <tr *ngFor="let p of produits; let i = index">
         <td class="cell-id">{{ i + 1 }}</td>
         <td class="cell-name">{{ p.nom }}</td>
         <td>{{ clientNom(p) }}</td>
@@ -60,7 +60,7 @@
         <td class="cell-date">{{ p.dateDepot ? (p.dateDepot | date:'dd/MM/yyyy') : '—' }}</td>
       </tr>
 
-      <tr *ngIf="filteredProduits.length === 0">
+      <tr *ngIf="produits.length === 0">
         <td colspan="7" class="empty-state">
           <div class="empty-content" style="text-align: center; padding: 30px; color: #888;">
             <span class="empty-icon" style="font-size: 24px;">📭</span>

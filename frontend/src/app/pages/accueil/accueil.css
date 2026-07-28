@@ -157,7 +157,6 @@
 
 .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4); }
 
-/* ---------- HERO ---------- */
 .hero {
   position: relative;
   padding-top: 66px;
@@ -582,7 +581,6 @@
   font-weight: 300;
 }
 
-/* ---------- ROLES ---------- */
 .roles-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

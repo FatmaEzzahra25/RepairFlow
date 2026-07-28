@@ -19,7 +19,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Service
 @RequiredArgsConstructor
 public class ProduitService {
@@ -32,9 +31,30 @@ public class ProduitService {
     @Value("${app.upload-dir:uploads}")
     private String uploadDir;
 
-    public List<Produit> getProduitsDuReparateur(String emailReparateur) {
+    public List<Produit> getProduitsDuReparateur(String emailReparateur, String statut, String categorieId, String q) {
         Utilisateur reparateur = getReparateurParEmail(emailReparateur);
-        return produitRepository.findByReparateur(reparateur);
+
+        StatutReparation statutFiltre = null;
+        if (statut != null && !statut.trim().isEmpty() && !"TOUS".equalsIgnoreCase(statut.trim())) {
+            try {
+                statutFiltre = StatutReparation.valueOf(statut.trim());
+            } catch (IllegalArgumentException ignored) {
+                // valeur inconnue -> pas de filtre plutot qu'une erreur 400
+            }
+        }
+
+        Long categorieIdFiltre = null;
+        if (categorieId != null && !categorieId.trim().isEmpty() && !"TOUS".equalsIgnoreCase(categorieId.trim())) {
+            try {
+                categorieIdFiltre = Long.valueOf(categorieId.trim());
+            } catch (NumberFormatException ignored) {
+                // valeur inconnue -> pas de filtre
+            }
+        }
+
+        String recherche = (q == null || q.trim().isEmpty()) ? null : q.trim();
+
+        return produitRepository.findByReparateurFiltered(reparateur, statutFiltre, categorieIdFiltre, recherche);
     }
 
     public List<Produit> getProduitsDuClient(String emailClient) {

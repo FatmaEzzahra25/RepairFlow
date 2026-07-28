@@ -1,9 +1,9 @@
 package com.RepairFlow.security.controller;
 
-import com.RepairFlow.security.service.ProduitService;
 import com.RepairFlow.security.model.Produit;
 import com.RepairFlow.security.model.StatutReparation;
 import com.RepairFlow.security.repository.ProduitRequest;
+import com.RepairFlow.security.service.ProduitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,8 +27,11 @@ public class ProduitController {
 
     @GetMapping
     @PreAuthorize("hasRole('REPARATEUR')")
-    public ResponseEntity<List<Produit>> getProduits() {
-        return ResponseEntity.ok(produitService.getProduitsDuReparateur(emailUtilisateurConnecte()));
+    public ResponseEntity<List<Produit>> getProduits(
+            @RequestParam(required = false) String statut,
+            @RequestParam(required = false) String categorieId,
+            @RequestParam(required = false) String q) {
+        return ResponseEntity.ok(produitService.getProduitsDuReparateur(emailUtilisateurConnecte(), statut, categorieId, q));
     }
 
     @PostMapping

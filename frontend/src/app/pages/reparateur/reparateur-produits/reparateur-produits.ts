@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReparateurService } from '../../../core/services/reparateur';
 import { API_BASE_URL } from '../../../core/services/api.config';
 
@@ -12,7 +14,7 @@ import { API_BASE_URL } from '../../../core/services/api.config';
   templateUrl: './reparateur-produits.html',
   styleUrls: ['./reparateur-produits.css']
 })
-export class ReparateurProduitsComponent implements OnInit {
+export class ReparateurProduitsComponent implements OnInit, OnDestroy {
   produits: any[] = [];
   clients: any[] = [];
   categories: any[] = [];
@@ -39,6 +41,8 @@ export class ReparateurProduitsComponent implements OnInit {
 
   statuts = ['RECU', 'EN_COURS', 'REPARE', 'PRET', 'LIVRE'];
 
+  private searchChanged = new Subject<void>();
+
   constructor(
     private reparateurService: ReparateurService,
     private cdr: ChangeDetectorRef,
@@ -46,14 +50,23 @@ export class ReparateurProduitsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchChanged.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.loadProduits());
+
     this.loadProduits();
     this.loadClients();
     this.loadCategories();
   }
 
+  ngOnDestroy(): void {
+    this.searchChanged.complete();
+  }
+
   loadProduits(): void {
     this.loading = true;
-    this.reparateurService.getProduits().subscribe({
+    this.reparateurService.getProduits(this.statusFilter, this.categoryFilter, this.searchQuery).subscribe({
       next: (data) => {
         this.produits = data;
         this.loading = false;
@@ -65,6 +78,14 @@ export class ReparateurProduitsComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  onFilterChange(): void {
+    this.loadProduits();
+  }
+
+  onSearchChange(): void {
+    this.searchChanged.next();
   }
 
   loadClients(): void {
@@ -87,29 +108,11 @@ export class ReparateurProduitsComponent implements OnInit {
     });
   }
 
-  get filteredProduits(): any[] {
-    let result = this.produits;
-    if (this.statusFilter !== 'TOUS') {
-      result = result.filter(p => p.statut === this.statusFilter);
-    }
-    if (this.categoryFilter !== 'TOUS') {
-      result = result.filter(p => p.categorie?.id === +this.categoryFilter);
-    }
-    if (this.searchQuery.trim()) {
-      const q = this.searchQuery.toLowerCase();
-      result = result.filter(p =>
-        p.nom?.toLowerCase().includes(q) ||
-        p.client?.nom?.toLowerCase().includes(q) ||
-        p.client?.prenom?.toLowerCase().includes(q)
-      );
-    }
-    return result;
-  }
-
   resetFilters(): void {
     this.statusFilter = 'TOUS';
     this.categoryFilter = 'TOUS';
     this.searchQuery = '';
+    this.loadProduits();
   }
 
   openAddModal(): void {

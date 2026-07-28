@@ -58,11 +58,12 @@ public class Reclamationservice {
         return saved;
     }
 
-    public List<Reclamation> getReclamationsDuClient(String emailClient) {
+    public List<Reclamation> getReclamationsDuClient(String emailClient, String statut) {
         Utilisateur client = utilisateurRepository.findByEmail(emailClient)
                 .filter(u -> u.getRole() == Role.CLIENT)
                 .orElseThrow(() -> new RuntimeException("Client non trouvé"));
 
-        return reclamationRepository.findByProduitClient(client);
+        String statutFiltre = (statut == null || statut.trim().isEmpty() || "TOUS".equalsIgnoreCase(statut)) ? null : statut.trim();
+        return reclamationRepository.findByProduitClientFiltered(client, statutFiltre);
     }
 }

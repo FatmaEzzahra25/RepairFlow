@@ -12,9 +12,9 @@
   <div class="filters-bar">
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher un client...">
+      <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" placeholder="Rechercher un client...">
     </div>
-    <button class="btn-reset" (click)="searchQuery = ''">↻ Réinitialiser</button>
+    <button class="btn-reset" (click)="searchQuery = ''; loadClients()">↻ Réinitialiser</button>
   </div>
 
   <div class="loading-state" *ngIf="loading" style="text-align: center; padding: 40px; color: #666;">
@@ -33,7 +33,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let c of filteredClients">
+      <tr *ngFor="let c of clients">
         <td>
           <div class="user-info">
             <div class="user-avatar">{{ getInitials(c?.prenom, c?.nom) }}</div>
@@ -53,7 +53,7 @@
         </td>
       </tr>
 
-      <tr *ngIf="filteredClients.length === 0">
+      <tr *ngIf="clients.length === 0">
         <td colspan="5" class="empty-state" style="text-align: center; padding: 30px; color: #888;">Aucun client trouvé</td>
       </tr>
       </tbody>

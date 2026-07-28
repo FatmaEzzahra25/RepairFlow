@@ -18,7 +18,6 @@ import { ReparateurLayoutComponent } from './pages/reparateur/reparateur-layout/
 import { ReparateurDashboardComponent } from './pages/reparateur/reparateur-dashboard/reparateur-dashboard';
 import { ReparateurProduitsComponent } from './pages/reparateur/reparateur-produits/reparateur-produits';
 import { ReparateurClientsComponent } from './pages/reparateur/reparateur-clients/reparateur-clients';
-import { ReparateurCategoriesComponent } from './pages/reparateur/reparateur-categories/reparateur-categories';
 import { ReparateurReclamationsComponent } from './pages/reparateur/reparateur-reclamations/reparateur-reclamations';
 
 import { ProfilePageComponent } from './shared/components/profile-page/profile-page';
@@ -131,10 +130,6 @@ export const routes: Routes = [
       {
         path: 'clients',
         component: ReparateurClientsComponent
-      },
-      {
-        path: 'categories',
-        component: ReparateurCategoriesComponent
       },
       {
         path: 'reclamations',

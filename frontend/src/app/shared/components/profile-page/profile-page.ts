@@ -29,6 +29,16 @@ export class ProfilePageComponent implements OnInit {
     adresse: ''
   };
 
+  passwordData = {
+    ancienMotDePasse: '',
+    nouveauMotDePasse: '',
+    confirmationMotDePasse: ''
+  };
+
+  changingPassword = false;
+  passwordSuccessMessage = '';
+  passwordErrorMessage = '';
+
   roleLabels: { [key: string]: string } = {
     ADMIN: 'Administrateur',
     REPARATEUR: 'Réparateur',
@@ -78,6 +88,43 @@ export class ProfilePageComponent implements OnInit {
       error: () => {
         this.saving = false;
         this.errorMessage = 'Erreur lors de la mise à jour.';
+      }
+    });
+  }
+
+  changePassword(): void {
+    this.passwordSuccessMessage = '';
+    this.passwordErrorMessage = '';
+
+    if (!this.passwordData.ancienMotDePasse || !this.passwordData.nouveauMotDePasse) {
+      this.passwordErrorMessage = 'Veuillez remplir tous les champs.';
+      return;
+    }
+
+    if (this.passwordData.nouveauMotDePasse !== this.passwordData.confirmationMotDePasse) {
+      this.passwordErrorMessage = 'La confirmation ne correspond pas au nouveau mot de passe.';
+      return;
+    }
+
+    if (this.passwordData.nouveauMotDePasse.length < 6) {
+      this.passwordErrorMessage = 'Le nouveau mot de passe doit contenir au moins 6 caractères.';
+      return;
+    }
+
+    this.changingPassword = true;
+    this.profilService.changePassword({
+      ancienMotDePasse: this.passwordData.ancienMotDePasse,
+      nouveauMotDePasse: this.passwordData.nouveauMotDePasse
+    }).subscribe({
+      next: () => {
+        this.changingPassword = false;
+        this.passwordSuccessMessage = 'Mot de passe changé avec succès.';
+        this.passwordData = { ancienMotDePasse: '', nouveauMotDePasse: '', confirmationMotDePasse: '' };
+        setTimeout(() => this.passwordSuccessMessage = '', 3000);
+      },
+      error: (err: any) => {
+        this.changingPassword = false;
+        this.passwordErrorMessage = err?.error?.message || 'Erreur lors du changement de mot de passe.';
       }
     });
   }

@@ -5,6 +5,7 @@ import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,7 @@ import java.util.Map;
 public class Utilisateurservice {
 
     private final UtilisateurRepository utilisateurRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${app.upload-dir:uploads}")
     private String uploadDir;
@@ -46,6 +48,26 @@ public class Utilisateurservice {
         }
 
         return utilisateurRepository.save(user);
+    }
+
+    public void changerMotDePasse(String ancienMotDePasse, String nouveauMotDePasse) {
+        Utilisateur user = utilisateurRepository.findById(getUtilisateurConnecte().getId())
+                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+
+        if (ancienMotDePasse == null || nouveauMotDePasse == null || nouveauMotDePasse.trim().isEmpty()) {
+            throw new RuntimeException("Champs de mot de passe invalides");
+        }
+
+        if (!passwordEncoder.matches(ancienMotDePasse, user.getMotDePasse())) {
+            throw new RuntimeException("Ancien mot de passe incorrect");
+        }
+
+        if (nouveauMotDePasse.length() < 6) {
+            throw new RuntimeException("Le nouveau mot de passe doit contenir au moins 6 caractères");
+        }
+
+        user.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
+        utilisateurRepository.save(user);
     }
 
     public Utilisateur uploaderPhotoProfil(MultipartFile photo) {

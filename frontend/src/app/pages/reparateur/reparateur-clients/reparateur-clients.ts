@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReparateurService } from '../../../core/services/reparateur';
 
 @Component({
@@ -11,7 +13,7 @@ import { ReparateurService } from '../../../core/services/reparateur';
   templateUrl: './reparateur-clients.html',
   styleUrls: ['./reparateur-clients.css']
 })
-export class ReparateurClientsComponent implements OnInit {
+export class ReparateurClientsComponent implements OnInit, OnDestroy {
   clients: any[] = [];
   loading = true;
   showModal = false;
@@ -31,6 +33,8 @@ export class ReparateurClientsComponent implements OnInit {
     envoyerEmail: true
   };
 
+  private searchChanged = new Subject<void>();
+
   constructor(
     private reparateurService: ReparateurService,
     private cdr: ChangeDetectorRef,
@@ -38,12 +42,21 @@ export class ReparateurClientsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.searchChanged.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.loadClients());
+
     this.loadClients();
+  }
+
+  ngOnDestroy(): void {
+    this.searchChanged.complete();
   }
 
   loadClients(): void {
     this.loading = true;
-    this.reparateurService.getClients().subscribe({
+    this.reparateurService.getClients(this.searchQuery).subscribe({
       next: (data) => {
         this.clients = data;
         this.loading = false;
@@ -57,15 +70,8 @@ export class ReparateurClientsComponent implements OnInit {
     });
   }
 
-  get filteredClients(): any[] {
-    if (!this.searchQuery.trim()) return this.clients;
-    const q = this.searchQuery.toLowerCase();
-    return this.clients.filter(c =>
-      c.prenom?.toLowerCase().includes(q) ||
-      c.nom?.toLowerCase().includes(q) ||
-      c.email?.toLowerCase().includes(q) ||
-      c.telephone?.includes(q)
-    );
+  onSearchChange(): void {
+    this.searchChanged.next();
   }
 
   getInitials(prenom: string, nom: string): string {

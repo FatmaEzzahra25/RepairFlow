@@ -1,7 +1,9 @@
-import { Component, OnInit, Inject, PLATFORM_ID, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { isPlatformBrowser } from '@angular/common';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { ReparateurService } from '../../../core/services/reparateur';
 
 @Component({
@@ -11,7 +13,7 @@ import { ReparateurService } from '../../../core/services/reparateur';
   templateUrl: './reparateur-reclamations.html',
   styleUrls: ['./reparateur-reclamations.css']
 })
-export class ReparateurReclamationsComponent implements OnInit {
+export class ReparateurReclamationsComponent implements OnInit, OnDestroy {
   reclamations = signal<any[]>([]);
   loading = signal(true);
 
@@ -22,20 +24,31 @@ export class ReparateurReclamationsComponent implements OnInit {
   statusFilter = 'TOUS';
   searchQuery = '';
 
+  private searchChanged = new Subject<void>();
+
   constructor(
     private reparateurService: ReparateurService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit(): void {
-    this.loadReclamations();
+    this.searchChanged.pipe(
+      debounceTime(300),
+      distinctUntilChanged()
+    ).subscribe(() => this.loadReclamations());
+
     this.searchQuery = '';
+    this.loadReclamations();
+  }
+
+  ngOnDestroy(): void {
+    this.searchChanged.complete();
   }
 
   loadReclamations(): void {
     this.loading.set(true);
 
-    this.reparateurService.getReclamations().subscribe({
+    this.reparateurService.getReclamations(this.statusFilter, this.searchQuery).subscribe({
       next: (data) => {
         this.reclamations.set(data);
         this.loading.set(false);
@@ -47,20 +60,18 @@ export class ReparateurReclamationsComponent implements OnInit {
     });
   }
 
-  get filteredReclamations(): any[] {
-    let result = this.reclamations() || [];
-    if (this.statusFilter !== 'TOUS') {
-      result = result.filter(r => r.statut === this.statusFilter);
-    }
-    if (this.searchQuery.trim()) {
-      const q = this.searchQuery.toLowerCase();
-      result = result.filter(r =>
-        r.produit?.nom?.toLowerCase().includes(q) ||
-        r.produit?.client?.nom?.toLowerCase().includes(q) ||
-        r.produit?.client?.prenom?.toLowerCase().includes(q)
-      );
-    }
-    return result;
+  onFilterChange(): void {
+    this.loadReclamations();
+  }
+
+  onSearchChange(): void {
+    this.searchChanged.next();
+  }
+
+  resetFilters(): void {
+    this.statusFilter = 'TOUS';
+    this.searchQuery = '';
+    this.loadReclamations();
   }
 
   cloturerReclamation(id: number): void {

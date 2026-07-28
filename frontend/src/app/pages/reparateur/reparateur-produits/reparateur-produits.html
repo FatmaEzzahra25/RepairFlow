@@ -10,7 +10,7 @@
   </div>
 
   <div class="filters-bar">
-    <select class="filter-select" [(ngModel)]="statusFilter">
+    <select class="filter-select" [(ngModel)]="statusFilter" (ngModelChange)="onFilterChange()">
       <option value="TOUS">Tous les statuts</option>
       <option value="RECU">Reçu</option>
       <option value="EN_COURS">En cours</option>
@@ -18,13 +18,13 @@
       <option value="PRET">Prêt</option>
       <option value="LIVRE">Livré</option>
     </select>
-    <select class="filter-select" [(ngModel)]="categoryFilter">
+    <select class="filter-select" [(ngModel)]="categoryFilter" (ngModelChange)="onFilterChange()">
       <option value="TOUS">Toutes les catégories</option>
       <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.libelle }}</option>
     </select>
     <div class="search-box">
       <span class="search-icon">🔍</span>
-      <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher un produit, client...">
+      <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" placeholder="Rechercher un produit, client...">
     </div>
     <button class="btn-reset" (click)="resetFilters()">↻ Réinitialiser</button>
   </div>
@@ -47,7 +47,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let p of filteredProduits">
+      <tr *ngFor="let p of produits">
         <td class="id-cell">#{{ p.id }}</td>
         <td>{{ p.dateDepot | date:'dd/MM/yyyy' }}</td>
         <td>
@@ -81,7 +81,7 @@
           </div>
         </td>
       </tr>
-      <tr *ngIf="filteredProduits.length === 0">
+      <tr *ngIf="produits.length === 0">
         <td colspan="7" class="empty-state" style="text-align: center; padding: 30px; color: #888;">Aucun produit trouvé</td>
       </tr>
       </tbody>

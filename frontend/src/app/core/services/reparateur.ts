@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from './api.config';
 
@@ -9,8 +9,12 @@ export class ReparateurService {
 
   constructor(private http: HttpClient) {}
 
-  getProduits(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/produits`);
+  getProduits(statut?: string | null, categorieId?: string | null, q?: string | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (statut && statut !== 'TOUS') params = params.set('statut', statut);
+    if (categorieId && categorieId !== 'TOUS') params = params.set('categorieId', categorieId);
+    if (q && q.trim()) params = params.set('q', q.trim());
+    return this.http.get<any[]>(`${this.apiUrl}/produits`, { params });
   }
 
   getProduitById(id: number): Observable<any> {
@@ -35,8 +39,10 @@ export class ReparateurService {
     return this.http.post(`${this.apiUrl}/produits/${id}/photo`, formData);
   }
 
-  getClients(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reparateur/clients`);
+  getClients(q?: string | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (q && q.trim()) params = params.set('q', q.trim());
+    return this.http.get<any[]>(`${this.apiUrl}/reparateur/clients`, { params });
   }
 
   createClient(data: any): Observable<any> {
@@ -55,8 +61,11 @@ export class ReparateurService {
     return this.http.get<any[]>(`${this.apiUrl}/admin/categories`);
   }
 
-  getReclamations(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/reparateur/reclamations`);
+  getReclamations(statut?: string | null, q?: string | null): Observable<any[]> {
+    let params = new HttpParams();
+    if (statut && statut !== 'TOUS') params = params.set('statut', statut);
+    if (q && q.trim()) params = params.set('q', q.trim());
+    return this.http.get<any[]>(`${this.apiUrl}/reparateur/reclamations`, { params });
   }
 
   cloturerReclamation(id: number): Observable<any> {

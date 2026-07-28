@@ -2,10 +2,10 @@ package com.RepairFlow.security.controller;
 
 import com.RepairFlow.security.auth.AuthenticationResponse;
 import com.RepairFlow.security.auth.RegisterRequest;
-import com.RepairFlow.security.service.Adminservice;
 import com.RepairFlow.security.model.CategorieProduit;
 import com.RepairFlow.security.model.Produit;
 import com.RepairFlow.security.model.Utilisateur;
+import com.RepairFlow.security.service.Adminservice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -81,8 +80,11 @@ public class AdminController {
 
     @GetMapping("/produits")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Produit>> listerTousLesProduits() {
-        return ResponseEntity.ok(adminService.listerTousLesProduits());
+    public ResponseEntity<List<Produit>> listerTousLesProduits(
+            @RequestParam(required = false) String reparateurId,
+            @RequestParam(required = false) String statut,
+            @RequestParam(required = false) String q) {
+        return ResponseEntity.ok(adminService.listerTousLesProduits(reparateurId, statut, q));
     }
 
     @GetMapping("/produits/{id}")

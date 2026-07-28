@@ -27,7 +27,7 @@ export class ClientReclamationsComponent implements OnInit {
 
   loadReclamations(): void {
     this.loading = true;
-    this.clientService.getMesReclamations().subscribe({
+    this.clientService.getMesReclamations(this.statusFilter).subscribe({
       next: (data) => {
         this.reclamations = data;
         this.loading = false;
@@ -39,9 +39,8 @@ export class ClientReclamationsComponent implements OnInit {
     });
   }
 
-  get filteredReclamations(): any[] {
-    if (this.statusFilter === 'TOUS') return this.reclamations;
-    return this.reclamations.filter(r => r.statut === this.statusFilter);
+  onFilterChange(): void {
+    this.loadReclamations();
   }
 
   private logError(message: string, err: any): void {

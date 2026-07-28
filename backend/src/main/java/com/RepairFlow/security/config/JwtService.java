@@ -47,7 +47,6 @@ public class JwtService {
                 .collect(Collectors.joining(","));
         extraClaims.put("role", role);
 
-        // Le subject devient l'ID (chiffre/signe dans le token), plus l'email.
         String subject = (userDetails instanceof Utilisateur utilisateur)
                 ? String.valueOf(utilisateur.getId())
                 : userDetails.getUsername();

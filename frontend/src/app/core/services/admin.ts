@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_BASE_URL } from './api.config';
+
+export interface ProduitsFilter {
+  reparateurId?: string | null;
+  statut?: string | null;
+  q?: string | null;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AdminService {
@@ -45,8 +51,18 @@ export class AdminService {
     return this.http.delete(`${this.apiUrl}/categories/${id}`);
   }
 
-  getProduits(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/produits`);
+  getProduits(filters: ProduitsFilter = {}): Observable<any[]> {
+    let params = new HttpParams();
+    if (filters.reparateurId && filters.reparateurId !== 'TOUS') {
+      params = params.set('reparateurId', filters.reparateurId);
+    }
+    if (filters.statut && filters.statut !== 'TOUS') {
+      params = params.set('statut', filters.statut);
+    }
+    if (filters.q && filters.q.trim()) {
+      params = params.set('q', filters.q.trim());
+    }
+    return this.http.get<any[]>(`${this.apiUrl}/produits`, { params });
   }
 
   deleteProduit(id: number): Observable<any> {

@@ -29,6 +29,10 @@ export class ProfilService {
     );
   }
 
+  changePassword(data: { ancienMotDePasse: string; nouveauMotDePasse: string }): Observable<any> {
+    return this.http.put(`${this.apiUrl}/me/password`, data);
+  }
+
   uploadPhoto(file: File): Observable<any> {
     const formData = new FormData();
     formData.append('photo', file);
