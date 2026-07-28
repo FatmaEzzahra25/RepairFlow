@@ -33,7 +33,7 @@ export class ReparateurClientsComponent implements OnInit, OnDestroy {
     envoyerEmail: true
   };
 
-  private searchChanged = new Subject<void>();
+  private searchChanged = new Subject<string>();
 
   constructor(
     private reparateurService: ReparateurService,
@@ -71,7 +71,7 @@ export class ReparateurClientsComponent implements OnInit, OnDestroy {
   }
 
   onSearchChange(): void {
-    this.searchChanged.next();
+    this.searchChanged.next(this.searchQuery);
   }
 
   getInitials(prenom: string, nom: string): string {

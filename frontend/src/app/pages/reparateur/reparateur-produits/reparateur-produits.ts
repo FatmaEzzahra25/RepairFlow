@@ -41,7 +41,7 @@ export class ReparateurProduitsComponent implements OnInit, OnDestroy {
 
   statuts = ['RECU', 'EN_COURS', 'REPARE', 'PRET', 'LIVRE'];
 
-  private searchChanged = new Subject<void>();
+  private searchChanged = new Subject<string>();
 
   constructor(
     private reparateurService: ReparateurService,
@@ -85,7 +85,7 @@ export class ReparateurProduitsComponent implements OnInit, OnDestroy {
   }
 
   onSearchChange(): void {
-    this.searchChanged.next();
+    this.searchChanged.next(this.searchQuery);
   }
 
   loadClients(): void {

@@ -24,7 +24,7 @@ export class ReparateurReclamationsComponent implements OnInit, OnDestroy {
   statusFilter = 'TOUS';
   searchQuery = '';
 
-  private searchChanged = new Subject<void>();
+  private searchChanged = new Subject<string>();
 
   constructor(
     private reparateurService: ReparateurService,
@@ -65,7 +65,7 @@ export class ReparateurReclamationsComponent implements OnInit, OnDestroy {
   }
 
   onSearchChange(): void {
-    this.searchChanged.next();
+    this.searchChanged.next(this.searchQuery);
   }
 
   resetFilters(): void {
