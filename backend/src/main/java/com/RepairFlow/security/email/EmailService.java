@@ -125,4 +125,22 @@ public class EmailService {
             log.error("Échec de l'envoi de l'email à {} : {}", email, e.getMessage());
         }
     }
+
+    public void envoyerNotificationChangementMotDePasse(String email, String prenom) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(email);
+            message.setSubject("RepairFlow - Votre mot de passe a été modifié");
+            message.setText(
+                    "Bonjour " + prenom + ",\n\n" +
+                            "Nous vous confirmons que le mot de passe de votre compte RepairFlow vient d'être modifié avec succès.\n\n" +
+                            "Si vous n'êtes pas à l'origine de cette modification, changez immédiatement votre mot de passe " +
+                            "et contactez l'administrateur.\n\n" +
+                            "Cordialement,\nL'équipe RepairFlow"
+            );
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("Échec de l'envoi de l'email à {} : {}", email, e.getMessage());
+        }
+    }
 }

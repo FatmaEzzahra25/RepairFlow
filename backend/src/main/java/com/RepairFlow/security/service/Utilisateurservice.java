@@ -1,5 +1,6 @@
 package com.RepairFlow.security.service;
 
+import com.RepairFlow.security.email.EmailService;
 import com.RepairFlow.security.model.Utilisateur;
 import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class Utilisateurservice {
 
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Value("${app.upload-dir:uploads}")
     private String uploadDir;
@@ -68,6 +70,8 @@ public class Utilisateurservice {
 
         user.setMotDePasse(passwordEncoder.encode(nouveauMotDePasse));
         utilisateurRepository.save(user);
+
+        emailService.envoyerNotificationChangementMotDePasse(user.getEmail(), user.getPrenom());
     }
 
     public Utilisateur uploaderPhotoProfil(MultipartFile photo) {
