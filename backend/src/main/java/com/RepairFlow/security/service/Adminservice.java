@@ -8,6 +8,9 @@ import com.RepairFlow.security.repository.CategorieProduitRepository;
 import com.RepairFlow.security.repository.ProduitRepository;
 import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -154,7 +157,7 @@ public class Adminservice {
         categorieProduitRepository.deleteById(id);
     }
 
-    public List<Produit> listerTousLesProduits(String reparateurId, String statut, String q) {
+    public Page<Produit> listerTousLesProduits(String reparateurId, String statut, String q, int page, int size) {
         Long reparateurIdFiltre = null;
         if (reparateurId != null && !reparateurId.trim().isEmpty() && !"TOUS".equalsIgnoreCase(reparateurId.trim())) {
             try {
@@ -174,7 +177,8 @@ public class Adminservice {
         }
 
         String recherche = (q == null || q.trim().isEmpty()) ? null : q.trim();
-        return produitRepository.findAllFiltered(reparateurIdFiltre, statutFiltre, recherche);
+        Pageable pageable = PageRequest.of(Math.max(page, 0), Math.max(size, 1));
+        return produitRepository.findAllFiltered(reparateurIdFiltre, statutFiltre, recherche, pageable);
     }
 
     public Produit getProduit(Long id) {

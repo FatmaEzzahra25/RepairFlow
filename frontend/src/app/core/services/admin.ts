@@ -7,6 +7,18 @@ export interface ProduitsFilter {
   reparateurId?: string | null;
   statut?: string | null;
   q?: string | null;
+  page?: number;
+  size?: number;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+  first: boolean;
+  last: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -51,7 +63,7 @@ export class AdminService {
     return this.http.delete(`${this.apiUrl}/categories/${id}`);
   }
 
-  getProduits(filters: ProduitsFilter = {}): Observable<any[]> {
+  getProduits(filters: ProduitsFilter = {}): Observable<PageResponse<any>> {
     let params = new HttpParams();
     if (filters.reparateurId && filters.reparateurId !== 'TOUS') {
       params = params.set('reparateurId', filters.reparateurId);
@@ -62,7 +74,9 @@ export class AdminService {
     if (filters.q && filters.q.trim()) {
       params = params.set('q', filters.q.trim());
     }
-    return this.http.get<any[]>(`${this.apiUrl}/produits`, { params });
+    params = params.set('page', String(filters.page ?? 0));
+    params = params.set('size', String(filters.size ?? 10));
+    return this.http.get<PageResponse<any>>(`${this.apiUrl}/produits`, { params });
   }
 
   deleteProduit(id: number): Observable<any> {

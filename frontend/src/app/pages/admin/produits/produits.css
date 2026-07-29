@@ -254,3 +254,59 @@ html.dark-mode .status-badge.pret { background: rgba(59, 130, 246, 0.18); color:
     width: 100%;
   }
 }
+
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-top: 1px solid #eee;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  color: #666;
+  font-size: 14px;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-page {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 8px;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.btn-page:hover:not(:disabled) {
+  background: #f3f4f6;
+}
+
+.btn-page.active {
+  background: #4F46E5;
+  border-color: #4F46E5;
+  color: #fff;
+}
+
+.btn-page:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .pagination-bar {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}

@@ -15,7 +15,7 @@ public interface ReclamationRepository extends JpaRepository<Reclamation, Long> 
     List<Reclamation> findByProduit(Produit produit);
 
     @Query("SELECT r FROM Reclamation r WHERE r.produit.client = :client " +
-            "AND (:statut IS NULL OR r.statut = :statut)")
+            "AND (:statut IS NULL OR r.statut = :statut) ORDER BY r.id DESC")
     List<Reclamation> findByProduitClientFiltered(@Param("client") Utilisateur client,
                                                   @Param("statut") String statut);
 
@@ -23,7 +23,8 @@ public interface ReclamationRepository extends JpaRepository<Reclamation, Long> 
             "AND (:statut IS NULL OR r.statut = :statut) " +
             "AND (:q IS NULL OR LOWER(r.produit.nom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%')) " +
             "     OR LOWER(r.produit.client.nom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%')) " +
-            "     OR LOWER(r.produit.client.prenom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%')))")
+            "     OR LOWER(r.produit.client.prenom) LIKE LOWER(CONCAT('%', CAST(:q as string), '%'))) " +
+            "ORDER BY r.id DESC")
     List<Reclamation> findByReparateurFiltered(@Param("reparateur") Utilisateur reparateur,
                                                @Param("statut") String statut,
                                                @Param("q") String q);

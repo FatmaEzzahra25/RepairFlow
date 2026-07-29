@@ -21,6 +21,11 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
   statutFilter: string = 'TOUS';
   searchTerm: string = '';
 
+  currentPage = 0;
+  pageSize = 10;
+  totalPages = 0;
+  totalElements = 0;
+
   statutLabels: Record<string, string> = {
     RECU: 'Reçu',
     EN_COURS: 'En cours',
@@ -28,7 +33,7 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
     PRET: 'Prêt'
   };
 
-  private searchChanged = new Subject<void>();
+  private searchChanged = new Subject<string>();
 
   constructor(
     private adminService: AdminService,
@@ -40,7 +45,10 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
     this.searchChanged.pipe(
       debounceTime(300),
       distinctUntilChanged()
-    ).subscribe(() => this.loadProduits());
+    ).subscribe(() => {
+      this.currentPage = 0;
+      this.loadProduits();
+    });
 
     this.loadReparateurs();
     this.loadProduits();
@@ -55,10 +63,14 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
     this.adminService.getProduits({
       reparateurId: this.selectedReparateurId,
       statut: this.statutFilter,
-      q: this.searchTerm
+      q: this.searchTerm,
+      page: this.currentPage,
+      size: this.pageSize
     }).subscribe({
       next: (data) => {
-        this.produits = data || [];
+        this.produits = data?.content || [];
+        this.totalPages = data?.totalPages ?? 0;
+        this.totalElements = data?.totalElements ?? 0;
         this.loading = false;
         this.cdr.detectChanges();
       },
@@ -68,6 +80,24 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  goToPage(page: number): void {
+    if (page < 0 || page >= this.totalPages || page === this.currentPage) return;
+    this.currentPage = page;
+    this.loadProduits();
+  }
+
+  previousPage(): void {
+    this.goToPage(this.currentPage - 1);
+  }
+
+  nextPage(): void {
+    this.goToPage(this.currentPage + 1);
+  }
+
+  get pageNumbers(): number[] {
+    return Array.from({ length: this.totalPages }, (_, i) => i);
   }
 
   private loadReparateurs(): void {
@@ -84,17 +114,19 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
   }
 
   onFilterChange(): void {
+    this.currentPage = 0;
     this.loadProduits();
   }
 
   onSearchChange(): void {
-    this.searchChanged.next();
+    this.searchChanged.next(this.searchTerm);
   }
 
   resetFilters(): void {
     this.selectedReparateurId = 'TOUS';
     this.statutFilter = 'TOUS';
     this.searchTerm = '';
+    this.currentPage = 0;
     this.loadProduits();
   }
 

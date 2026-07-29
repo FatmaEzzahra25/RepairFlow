@@ -70,5 +70,22 @@
       </tr>
       </tbody>
     </table>
+
+    <div class="pagination-bar" *ngIf="totalElements > 0">
+      <span class="pagination-info">
+        {{ totalElements }} produit(s) — page {{ currentPage + 1 }} / {{ totalPages }}
+      </span>
+      <div class="pagination-controls">
+        <button class="btn-page" [disabled]="currentPage === 0" (click)="previousPage()">‹ Précédent</button>
+        <button
+          *ngFor="let pg of pageNumbers"
+          class="btn-page"
+          [class.active]="pg === currentPage"
+          (click)="goToPage(pg)">
+          {{ pg + 1 }}
+        </button>
+        <button class="btn-page" [disabled]="currentPage >= totalPages - 1" (click)="nextPage()">Suivant ›</button>
+      </div>
+    </div>
   </div>
 </div>

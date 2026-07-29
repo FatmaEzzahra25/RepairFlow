@@ -7,6 +7,7 @@ import com.RepairFlow.security.model.Produit;
 import com.RepairFlow.security.model.Utilisateur;
 import com.RepairFlow.security.service.Adminservice;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -78,13 +79,18 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    // statut et reparateurId recus en String bruts : si le frontend envoie
+    // "TOUS" (valeur par defaut d'un filtre), Spring ne doit pas planter en
+    // essayant de le convertir en enum/Long. Le parsing se fait dans le service.
     @GetMapping("/produits")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Produit>> listerTousLesProduits(
+    public ResponseEntity<Page<Produit>> listerTousLesProduits(
             @RequestParam(required = false) String reparateurId,
             @RequestParam(required = false) String statut,
-            @RequestParam(required = false) String q) {
-        return ResponseEntity.ok(adminService.listerTousLesProduits(reparateurId, statut, q));
+            @RequestParam(required = false) String q,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(adminService.listerTousLesProduits(reparateurId, statut, q, page, size));
     }
 
     @GetMapping("/produits/{id}")
