@@ -75,7 +75,7 @@ export class AdminService {
       params = params.set('q', filters.q.trim());
     }
     params = params.set('page', String(filters.page ?? 0));
-    params = params.set('size', String(filters.size ?? 10));
+    params = params.set('size', String(filters.size ?? 3));
     return this.http.get<PageResponse<any>>(`${this.apiUrl}/produits`, { params });
   }
 

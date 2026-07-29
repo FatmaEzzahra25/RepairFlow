@@ -22,7 +22,7 @@ export class AdminProduitsComponent implements OnInit, OnDestroy {
   searchTerm: string = '';
 
   currentPage = 0;
-  pageSize = 10;
+  pageSize = 3;
   totalPages = 0;
   totalElements = 0;
 
