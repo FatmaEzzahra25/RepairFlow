@@ -28,6 +28,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getDashboard());
     }
 
+    @GetMapping("/statistiques")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Map<String, Object>> getStatistiques(@RequestParam(defaultValue = "30") int jours) {
+        return ResponseEntity.ok(adminService.getStatistiques(jours));
+    }
+
     @GetMapping("/reparateurs")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Utilisateur>> getReparateurs() {
@@ -79,6 +85,9 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
+    // statut et reparateurId recus en String bruts : si le frontend envoie
+    // "TOUS" (valeur par defaut d'un filtre), Spring ne doit pas planter en
+    // essayant de le convertir en enum/Long. Le parsing se fait dans le service.
     @GetMapping("/produits")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<Produit>> listerTousLesProduits(
@@ -86,7 +95,7 @@ public class AdminController {
             @RequestParam(required = false) String statut,
             @RequestParam(required = false) String q,
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "3") int size) {
+            @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(adminService.listerTousLesProduits(reparateurId, statut, q, page, size));
     }
 

@@ -31,6 +31,10 @@ export class AdminService {
     return this.http.get(`${this.apiUrl}/dashboard`);
   }
 
+  getStatistiques(jours: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/statistiques`, { params: { jours: String(jours) } });
+  }
+
   getReparateurs(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/reparateurs`);
   }
@@ -75,7 +79,7 @@ export class AdminService {
       params = params.set('q', filters.q.trim());
     }
     params = params.set('page', String(filters.page ?? 0));
-    params = params.set('size', String(filters.size ?? 3));
+    params = params.set('size', String(filters.size ?? 10));
     return this.http.get<PageResponse<any>>(`${this.apiUrl}/produits`, { params });
   }
 

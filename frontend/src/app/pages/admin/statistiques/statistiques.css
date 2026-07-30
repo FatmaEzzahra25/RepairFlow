@@ -1,5 +1,61 @@
-.dashboard {
+.statistiques-page {
   max-width: 1400px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.back-link {
+  display: inline-block;
+  font-size: 13px;
+  color: var(--text-faint);
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.back-link:hover {
+  color: #4F46E5;
+}
+
+.page-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--text-primary);
+}
+
+.periode-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.periode-btn {
+  padding: 8px 16px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.periode-btn:hover {
+  border-color: #4F46E5;
+  color: #4F46E5;
+}
+
+.periode-btn.active {
+  background: #4F46E5;
+  border-color: #4F46E5;
+  color: #fff;
 }
 
 .loading {
@@ -11,7 +67,7 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   margin-bottom: 24px;
 }
@@ -32,6 +88,7 @@
 .stat-card.blue { background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%); }
 .stat-card.green { background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%); }
 .stat-card.orange { background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); }
+.stat-card.red { background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%); }
 
 .stat-icon {
   font-size: 28px;
@@ -51,15 +108,12 @@
   margin-top: 4px;
 }
 
-.charts-section {
-  margin-top: 24px;
-}
-
 .chart-card {
   background: var(--bg-primary);
   border-radius: 16px;
   padding: 24px;
   border: 1px solid var(--border-color);
+  margin-bottom: 20px;
 }
 
 .chart-card h3 {
@@ -67,67 +121,43 @@
   font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 20px 0;
-}
-
-.chart-card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
 }
 
-.chart-card-header h3 {
-  margin: 0;
-}
-
-.btn-more-stats {
-  white-space: nowrap;
-  font-size: 13px;
+.granularite-badge {
+  font-size: 11px;
   font-weight: 600;
   color: #4F46E5;
-  text-decoration: none;
-  padding: 6px 12px;
-  border: 1px solid #4F46E5;
-  border-radius: 8px;
-  transition: background 0.15s, color 0.15s;
+  background: #EEF2FF;
+  padding: 3px 8px;
+  border-radius: 6px;
 }
 
-.btn-more-stats:hover {
-  background: #4F46E5;
-  color: #fff;
+.chart-canvas-wrap {
+  position: relative;
+  height: 260px;
 }
 
-@media (max-width: 480px) {
-  .chart-card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-
-.chart-placeholder {
-  height: 200px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-tertiary);
-  border-radius: 12px;
-  color: var(--text-faint);
-  font-size: 14px;
+.chart-canvas-wrap.chart-line {
+  height: 320px;
 }
 
 .activity-chart {
-  height: 180px;
+  height: 200px;
   display: flex;
   align-items: flex-end;
   gap: 3px;
   background: var(--bg-tertiary);
   border-radius: 12px;
   padding: 12px;
+  overflow-x: auto;
 }
 
 .activity-bar-wrap {
   flex: 1;
+  min-width: 4px;
   height: 100%;
   display: flex;
   align-items: flex-end;
@@ -239,6 +269,13 @@
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary);
+}
+
+.empty-msg {
+  color: var(--text-faint);
+  font-size: 14px;
+  text-align: center;
+  padding: 20px 0;
 }
 
 @media (max-width: 1024px) {

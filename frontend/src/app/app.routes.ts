@@ -8,6 +8,7 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard';
 import { ReparateursComponent } from './pages/admin/reparateurs/reparateurs';
 import { CategoriesComponent } from './pages/admin/categories/categories';
 import { AdminProduitsComponent } from './pages/admin/produits/produits';
+import { AdminStatistiquesComponent } from './pages/admin/statistiques/statistiques';
 
 import { ClientLayoutComponent } from './pages/client/client-layout/client-layout';
 import { ClientDashboardComponent } from './pages/client/client-dashboard/client-dashboard';
@@ -64,6 +65,10 @@ export const routes: Routes = [
       {
         path: 'produits',
         component: AdminProduitsComponent
+      },
+      {
+        path: 'statistiques',
+        component: AdminStatistiquesComponent
       },
       {
         path: 'profil',

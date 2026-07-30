@@ -19,14 +19,17 @@ export class AdminLayoutComponent {
     { icon: '🔧', label: 'Réparateurs', route: '/admin/reparateurs' },
     { icon: '📁', label: 'Catégories', route: '/admin/categories' },
     { icon: '📦', label: 'Produits', route: '/admin/produits' },
+    { icon: '📈', label: 'Statistiques', route: '/admin/statistiques' },
   ];
 
   pageTitles: { [key: string]: string } = {
     '/admin/dashboard': 'Tableau de Bord',
+    '/admin/statistiques': 'Statistiques & historique',
   };
 
   pageSubtitles: { [key: string]: string } = {
     '/admin/dashboard': "Vue d'ensemble de l'activité RepairFlow",
+    '/admin/statistiques': "Analysez l'activité sur des périodes plus longues",
   };
 
   onSidebarCollapsed(collapsed: boolean): void {

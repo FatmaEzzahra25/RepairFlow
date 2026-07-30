@@ -1,0 +1,85 @@
+<div class="statistiques-page">
+  <div class="page-header">
+    <div>
+      <a routerLink="/admin/dashboard" class="back-link">← Retour au tableau de bord</a>
+      <h2>📊 Statistiques &amp; historique</h2>
+    </div>
+
+    <div class="periode-selector">
+      <button
+        *ngFor="let p of periodes"
+        class="periode-btn"
+        [class.active]="p.jours === selectedJours"
+        (click)="selectPeriode(p.jours)">
+        {{ p.label }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">Chargement des statistiques...</div>
+
+  <div class="statistiques-content" *ngIf="!loading && stats">
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon">📦</div>
+        <div class="stat-value">{{ stats.totalProduitsPeriode }}</div>
+        <div class="stat-label">Produits déposés</div>
+      </div>
+      <div class="stat-card orange">
+        <div class="stat-icon">🗣️</div>
+        <div class="stat-value">{{ stats.totalReclamationsPeriode }}</div>
+        <div class="stat-label">Réclamations</div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon">🔓</div>
+        <div class="stat-value">{{ stats.reclamationsOuvertes }}</div>
+        <div class="stat-label">Réclamations ouvertes</div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value">{{ stats.reclamationsFermees }}</div>
+        <div class="stat-label">Réclamations fermées</div>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3>
+        📈 Activité par réparateur
+        <span class="granularite-badge">{{ stats.granularite === 'mois' ? 'par mois' : 'par jour' }}</span>
+      </h3>
+      <div class="chart-canvas-wrap chart-line">
+        <canvas baseChart
+                [type]="lineChartType"
+                [data]="lineChartData"
+                [options]="lineChartOptions">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="bottom-section">
+      <div class="chart-card">
+        <h3>📦 Produits par catégorie</h3>
+        <div class="chart-canvas-wrap" *ngIf="barChartData.labels?.length; else vide1">
+          <canvas baseChart
+                  [type]="barChartType"
+                  [data]="barChartData"
+                  [options]="barChartOptions">
+          </canvas>
+        </div>
+        <ng-template #vide1><p class="empty-msg">Aucun produit sur cette période.</p></ng-template>
+      </div>
+
+      <div class="chart-card">
+        <h3>🔄 Statuts des produits</h3>
+        <div class="chart-canvas-wrap" *ngIf="pieChartData.labels?.length; else vide2">
+          <canvas baseChart
+                  [type]="pieChartType"
+                  [data]="pieChartData"
+                  [options]="pieChartOptions">
+          </canvas>
+        </div>
+        <ng-template #vide2><p class="empty-msg">Aucun produit sur cette période.</p></ng-template>
+      </div>
+    </div>
+  </div>
+</div>

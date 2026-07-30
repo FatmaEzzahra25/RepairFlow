@@ -52,7 +52,10 @@
 
   <div class="charts-section">
     <div class="chart-card">
-      <h3>📈 Activité des 15 derniers jours</h3>
+      <div class="chart-card-header">
+        <h3>📈 Activité des 15 derniers jours</h3>
+        <a routerLink="/admin/statistiques" class="btn-more-stats">Voir plus de statistiques →</a>
+      </div>
       <div class="activity-chart">
         <div class="activity-bar-wrap" *ngFor="let jour of stats?.activiteParJour | keyvalue" [title]="jour.key.toString() + ' : ' + jour.value + ' produit(s)'">
           <div class="activity-bar" [style.height.%]="getBarHeight(+jour.value)"></div>

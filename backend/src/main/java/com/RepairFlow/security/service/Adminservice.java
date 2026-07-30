@@ -6,6 +6,7 @@ import com.RepairFlow.security.email.EmailService;
 import com.RepairFlow.security.model.*;
 import com.RepairFlow.security.repository.CategorieProduitRepository;
 import com.RepairFlow.security.repository.ProduitRepository;
+import com.RepairFlow.security.repository.ReclamationRepository;
 import com.RepairFlow.security.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +27,7 @@ public class Adminservice {
 
     private final UtilisateurRepository utilisateurRepository;
     private final ProduitRepository produitRepository;
+    private final ReclamationRepository reclamationRepository;
     private final CategorieProduitRepository categorieProduitRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -68,6 +70,115 @@ public class Adminservice {
         stats.put("produitsParCategorie", produitsParCategorie);
         stats.put("produitsParStatut", produitsParStatut);
         stats.put("activiteParJour", activiteParJour);
+
+        return stats;
+    }
+
+    public Map<String, Object> getStatistiques(int jours) {
+        LocalDate aujourdhui = LocalDate.now();
+        LocalDate debut = aujourdhui.minusDays(jours - 1L);
+
+        List<Produit> produits = produitRepository.findAll().stream()
+                .filter(p -> p.getDateDepot() != null && !p.getDateDepot().toLocalDate().isBefore(debut))
+                .toList();
+
+        List<Reclamation> reclamations = reclamationRepository.findAll().stream()
+                .filter(r -> r.getDate() != null && !r.getDate().toLocalDate().isBefore(debut))
+                .toList();
+
+        Map<String, Long> produitsParStatut = new HashMap<>();
+        for (Produit p : produits) {
+            String statut = p.getStatut() != null ? p.getStatut().name() : "INCONNU";
+            produitsParStatut.merge(statut, 1L, Long::sum);
+        }
+
+        Map<String, Long> produitsParCategorie = new HashMap<>();
+        for (Produit p : produits) {
+            String cat = p.getCategorie() != null ? p.getCategorie().getLibelle() : "Non catégorisé";
+            produitsParCategorie.merge(cat, 1L, Long::sum);
+        }
+
+        long reclamationsOuvertes = reclamations.stream()
+                .filter(r -> "OUVERT".equalsIgnoreCase(r.getStatut()))
+                .count();
+        long reclamationsFermees = reclamations.size() - reclamationsOuvertes;
+
+        boolean granulariteMois = jours > 60;
+        Map<String, Long> activiteParPeriode = new LinkedHashMap<>();
+
+        if (granulariteMois) {
+            LocalDate curseur = debut.withDayOfMonth(1);
+            LocalDate finMois = aujourdhui.withDayOfMonth(1);
+            while (!curseur.isAfter(finMois)) {
+                LocalDate moisCourant = curseur;
+                long count = produits.stream()
+                        .filter(p -> {
+                            LocalDate d = p.getDateDepot().toLocalDate();
+                            return d.getYear() == moisCourant.getYear() && d.getMonthValue() == moisCourant.getMonthValue();
+                        })
+                        .count();
+                activiteParPeriode.put(moisCourant.getYear() + "-" + String.format("%02d", moisCourant.getMonthValue()), count);
+                curseur = curseur.plusMonths(1);
+            }
+        } else {
+            for (int i = jours - 1; i >= 0; i--) {
+                LocalDate jour = aujourdhui.minusDays(i);
+                long count = produits.stream()
+                        .filter(p -> p.getDateDepot().toLocalDate().equals(jour))
+                        .count();
+                activiteParPeriode.put(jour.toString(), count);
+            }
+        }
+
+        List<Utilisateur> reparateurs = utilisateurRepository.findAll().stream()
+                .filter(u -> u.getRole() == Role.REPARATEUR)
+                .toList();
+
+        Map<String, Map<String, Long>> activiteParReparateur = new LinkedHashMap<>();
+        for (Utilisateur reparateur : reparateurs) {
+            String nomComplet = (reparateur.getPrenom() + " " + reparateur.getNom()).trim();
+            Map<String, Long> serie = new LinkedHashMap<>();
+
+            if (granulariteMois) {
+                LocalDate curseur = debut.withDayOfMonth(1);
+                LocalDate finMois = aujourdhui.withDayOfMonth(1);
+                while (!curseur.isAfter(finMois)) {
+                    LocalDate moisCourant = curseur;
+                    long count = produits.stream()
+                            .filter(p -> p.getReparateur() != null && reparateur.getId().equals(p.getReparateur().getId()))
+                            .filter(p -> {
+                                LocalDate d = p.getDateDepot().toLocalDate();
+                                return d.getYear() == moisCourant.getYear() && d.getMonthValue() == moisCourant.getMonthValue();
+                            })
+                            .count();
+                    serie.put(moisCourant.getYear() + "-" + String.format("%02d", moisCourant.getMonthValue()), count);
+                    curseur = curseur.plusMonths(1);
+                }
+            } else {
+                for (int i = jours - 1; i >= 0; i--) {
+                    LocalDate jour = aujourdhui.minusDays(i);
+                    long count = produits.stream()
+                            .filter(p -> p.getReparateur() != null && reparateur.getId().equals(p.getReparateur().getId()))
+                            .filter(p -> p.getDateDepot().toLocalDate().equals(jour))
+                            .count();
+                    serie.put(jour.toString(), count);
+                }
+            }
+
+            activiteParReparateur.put(nomComplet, serie);
+        }
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("periodeJours", jours);
+        stats.put("granularite", granulariteMois ? "mois" : "jour");
+        stats.put("totalProduitsPeriode", (long) produits.size());
+        stats.put("totalReclamationsPeriode", (long) reclamations.size());
+        stats.put("reclamationsOuvertes", reclamationsOuvertes);
+        stats.put("reclamationsFermees", reclamationsFermees);
+        stats.put("produitsParStatut", produitsParStatut);
+        stats.put("produitsParCategorie", produitsParCategorie);
+        stats.put("activiteParPeriode", activiteParPeriode);
+        stats.put("activiteParReparateur", activiteParReparateur);
 
         return stats;
     }
